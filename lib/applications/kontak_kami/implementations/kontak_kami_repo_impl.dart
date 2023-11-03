@@ -19,7 +19,7 @@ class KontakKamiRepoImpl extends KontakKamiRepo {
   Future<Either<KontakException, InfoKontak>> getKontakKami() async {
     try {
       final response = await dio.get(
-        baseUrl + "kontak",
+        "${baseUrl}kontak",
       );
       if (response.statusCode != 200) {
         throw KontakException(response.data);
@@ -36,7 +36,7 @@ class KontakKamiRepoImpl extends KontakKamiRepo {
   Future<Either<KontakException, List<Message>>> getMessage() async {
     try {
       final response = await dio.get(
-        baseUrl + "message",
+        "${baseUrl}message",
       );
       if (response.statusCode != 200) {
         throw KontakException(response.data);
@@ -60,7 +60,7 @@ class KontakKamiRepoImpl extends KontakKamiRepo {
         "Message": message,
       };
       final response = await dio.post(
-        baseUrl + "message",
+        "${baseUrl}message",
         data: jsonEncode(params),
       );
       if (response.statusCode != 200) {
@@ -77,7 +77,7 @@ class KontakKamiRepoImpl extends KontakKamiRepo {
       KontakRequest kontakRequest) async {
     try {
       final response = await dio.put(
-        baseUrl + "kontak",
+        "${baseUrl}kontak",
         data: kontakRequest.toJson(),
       );
       if (response.statusCode != 200) {

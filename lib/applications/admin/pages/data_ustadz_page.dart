@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sibaba/applications/admin/models/ustadz.dart';
@@ -12,7 +13,7 @@ import 'package:sibaba/injection.dart';
 import 'package:sibaba/presentation/color_constant.dart';
 import 'package:sibaba/presentation/widgets/custom_appbar.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 // import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -171,7 +172,7 @@ class _DataUstadzLayout extends StatelessWidget {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
             onPressed: () {
-              // saveExcel(cubit.ustadz);
+              saveExcel(cubit.ustadz);
             },
             child: 'Excel'.text.base.make(),
           ).w(100).h(30),
@@ -247,51 +248,59 @@ class _DataUstadzLayout extends StatelessWidget {
     OpenFilex.open('$path/$fileName');
   }
 
-  // Future<void> saveExcel(List<Ustadz> ustadz) async {
-  //   final Workbook workbook = Workbook(1);
+  Future<void> saveExcel(List<Ustadz> ustadz) async {
+    try {
+      final Workbook workbook = Workbook(1);
 
-  //   final Worksheet sheet = workbook.worksheets[0];
+      final Worksheet sheet = workbook.worksheets[0];
 
-  //   sheet.getRangeByName('A1:D1').setText('Data Ustadz TKA-TPA Badko Bantul');
-  //   sheet.getRangeByName('A1:D1').merge();
-  //   sheet.getRangeByName('A2').setText('No Induk');
-  //   sheet.getRangeByName('B2').setText('Kapanewon');
-  //   sheet.getRangeByName('C2').setText('Nama');
-  //   sheet.getRangeByName('D2').setText('Alamat');
-  //   sheet
-  //       .getRangeByName('A${ustadz.length + 3}:E${ustadz.length + 3}')
-  //       .setText('*Ustadz yang sudah terdaftar di Badko Bantul*');
-  //   sheet.getRangeByName('A${ustadz.length + 3}:E${ustadz.length + 3}').merge();
+      sheet.getRangeByName('A1:D1').setText('Data Ustadz TKA-TPA Badko Bantul');
+      sheet.getRangeByName('A1:D1').merge();
+      sheet.getRangeByName('A2').setText('No Induk');
+      sheet.getRangeByName('B2').setText('Kapanewon');
+      sheet.getRangeByName('C2').setText('Nama');
+      sheet.getRangeByName('D2').setText('Alamat');
+      sheet
+          .getRangeByName('A${ustadz.length + 3}:E${ustadz.length + 3}')
+          .setText('*Ustadz yang sudah terdaftar di Badko Bantul*');
+      sheet
+          .getRangeByName('A${ustadz.length + 3}:E${ustadz.length + 3}')
+          .merge();
 
-  //   for (int i = 0; i < ustadz.length; i++) {
-  //     sheet.getRangeByName('A${i + 3}').setText(ustadz[i].ustadzsId.toString());
-  //     sheet.getRangeByName('A${i + 3}').columnWidth = 15;
-  //     sheet.getRangeByName('B${i + 3}').setText(ustadz[i].location.areaUnit);
-  //     sheet.getRangeByName('B${i + 3}').columnWidth = 10;
-  //     sheet.getRangeByName('C${i + 3}').setText(ustadz[i].nama);
-  //     sheet.getRangeByName('C${i + 3}').columnWidth = 20;
-  //     sheet.getRangeByName('D${i + 3}').setText(ustadz[i].alamat);
-  //     sheet.getRangeByName('D${i + 3}').columnWidth = 50;
-  //   }
+      for (int i = 0; i < ustadz.length; i++) {
+        sheet
+            .getRangeByName('A${i + 3}')
+            .setText(ustadz[i].ustadzsId.toString());
+        sheet.getRangeByName('A${i + 3}').columnWidth = 15;
+        sheet.getRangeByName('B${i + 3}').setText(ustadz[i].location.areaUnit);
+        sheet.getRangeByName('B${i + 3}').columnWidth = 10;
+        sheet.getRangeByName('C${i + 3}').setText(ustadz[i].nama);
+        sheet.getRangeByName('C${i + 3}').columnWidth = 20;
+        sheet.getRangeByName('D${i + 3}').setText(ustadz[i].alamat);
+        sheet.getRangeByName('D${i + 3}').columnWidth = 50;
+      }
 
-  //   final Style headingStyle = workbook.styles.add('HeadingStyle');
-  //   headingStyle.bold = true;
-  //   headingStyle.hAlign = HAlignType.center;
-  //   headingStyle.wrapText = true;
-  //   sheet.getRangeByName('A1:D1').cellStyle = headingStyle;
-  //   sheet.getRangeByName('A2:D2').cellStyle = headingStyle;
-  //   sheet
-  //       .getRangeByName('A${ustadz.length + 3}:D${ustadz.length + 3}')
-  //       .cellStyle = headingStyle;
+      final Style headingStyle = workbook.styles.add('HeadingStyle');
+      headingStyle.bold = true;
+      headingStyle.hAlign = HAlignType.center;
+      headingStyle.wrapText = true;
+      sheet.getRangeByName('A1:D1').cellStyle = headingStyle;
+      sheet.getRangeByName('A2:D2').cellStyle = headingStyle;
+      sheet
+          .getRangeByName('A${ustadz.length + 3}:D${ustadz.length + 3}')
+          .cellStyle = headingStyle;
 
-  //   final List<int> bytes = workbook.saveAsStream();
-  //   workbook.dispose();
+      final List<int> bytes = workbook.saveAsStream();
+      workbook.dispose();
 
-  //   final path = (await getExternalStorageDirectory())!.path;
-  //   final file = File('$path/Output.xlsx');
-  //   await file.writeAsBytes(bytes, flush: true);
-  //   OpenFilex.open('$path/Output.xlsx');
-  // }
+      final path = (await getExternalStorageDirectory())!.path;
+      final file = File('$path/Output.xlsx');
+      await file.writeAsBytes(bytes);
+      OpenFilex.open('$path/Output.xlsx');
+    } catch (e) {
+      print(e);
+    }
+  }
 }
 
 class UstadzData extends DataTableSource {

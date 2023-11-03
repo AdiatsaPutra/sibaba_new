@@ -85,37 +85,52 @@ class _KapanewonLayout extends StatelessWidget {
         onRefresh: () async {
           context.read<KapanewonCubit>().getKapanewon();
         },
-        child: VStack(
-          [
-            TextFormField(
-              controller: cubit.searchKeyword,
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                hintText: 'Cari Kelurahan (Nama, Kode Area)',
-                hintStyle: TextStyle(fontSize: 14),
+        child: BlocListener<AddKelurahanCubit, AddKelurahanState>(
+          listener: (context, state) => state.maybeWhen(
+            added: () {
+              context.read<KelurahanCubit>().getKelurahan();
+              return null;
+            },
+            updated: () {
+              context.read<KelurahanCubit>().getKelurahan();
+              return null;
+            },
+            orElse: () {
+              return null;
+            },
+          ),
+          child: VStack(
+            [
+              TextFormField(
+                controller: cubit.searchKeyword,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  hintText: 'Cari Kelurahan (Nama, Kode Area)',
+                  hintStyle: TextStyle(fontSize: 14),
+                ),
+                onChanged: (value) {
+                  cubit.searchKelurahan();
+                },
               ),
-              onChanged: (value) {
-                cubit.searchKelurahan();
-              },
-            ),
-            const SizedBox(height: 10),
-            PaginatedDataTable(
-              source: KapanewonData(
-                  context, kelurahan, cubit, kapanewon, addKelurahanCubit),
-              header: 'Data Kelurahan'.text.xl.make(),
-              columns: const [
-                DataColumn(label: Text('No')),
-                DataColumn(label: Text('Action')),
-                DataColumn(label: Text('Kelurahan')),
-                DataColumn(label: Text('Kapanewon')),
-              ],
-              columnSpacing: 50,
-              horizontalMargin: 20,
-              rowsPerPage: kelurahan.length,
-              showCheckboxColumn: false,
-            ),
-            const SizedBox(height: 100),
-          ],
+              const SizedBox(height: 10),
+              PaginatedDataTable(
+                source: KapanewonData(
+                    context, kelurahan, cubit, kapanewon, addKelurahanCubit),
+                header: 'Data Kelurahan'.text.xl.make(),
+                columns: const [
+                  DataColumn(label: Text('No')),
+                  DataColumn(label: Text('Action')),
+                  DataColumn(label: Text('Kelurahan')),
+                  DataColumn(label: Text('Kapanewon')),
+                ],
+                columnSpacing: 50,
+                horizontalMargin: 20,
+                rowsPerPage: kelurahan.length,
+                showCheckboxColumn: false,
+              ),
+              const SizedBox(height: 100),
+            ],
+          ),
         ).centered().p16().scrollVertical(),
       ),
       floatingActionButton: FloatingActionButton.extended(

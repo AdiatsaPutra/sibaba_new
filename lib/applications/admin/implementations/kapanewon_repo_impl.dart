@@ -15,7 +15,7 @@ class KapanewonRepoImpl extends KapanewonRepo {
   Future<Either<AdminException, List<Kapanewon>>> getKapanewon() async {
     try {
       final response = await dio.get(
-        baseUrl + "kapanewon",
+        "${baseUrl}kapanewon",
       );
       if (response.statusCode != 200) {
         throw AdminException(response.data);
@@ -36,7 +36,7 @@ class KapanewonRepoImpl extends KapanewonRepo {
         'area_name': name,
         'kode_area': kode,
       };
-      final response = await dio.post(baseUrl + "kapanewon", data: data);
+      final response = await dio.post("${baseUrl}kapanewon", data: data);
       if (response.statusCode != 200) {
         throw AdminException(response.data);
       }
@@ -71,7 +71,7 @@ class KapanewonRepoImpl extends KapanewonRepo {
   Future<Either<AdminException, void>> deleteKapanewon(int id) async {
     try {
       final response = await dio.delete(
-        baseUrl + "kapanewon" + "/$id",
+        "${baseUrl}kapanewon/$id",
       );
       if (response.statusCode != 200) {
         throw AdminException(response.data);

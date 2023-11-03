@@ -322,113 +322,124 @@ class __AddLokasiLayoutState extends State<_AddLokasiLayout> {
             ).wFull(context).p16(),
           ]);
         }
-        return Stepper(
-          controlsBuilder: (BuildContext context, ControlsDetails details) {
-            return HStack([
-              OutlinedButton(
-                onPressed: () {
-                  cancel();
-                },
-                child: 'Kembali'.text.base.make(),
-              ).expand(),
-              const SizedBox(width: 10),
-              Builder(
-                builder: (context) => isLastStep
-                    ? BlocConsumer<InfoLokasiCubit, InfoLokasiState>(
-                        listener: (context, state) => state.maybeWhen(
-                          added: () {
-                            Get.back();
-                            PopupMessages.successPopup(
-                              'Berhasil menambahkan data lokasi',
-                            );
-                            context.read<RefreshCubit>().refreshAdminLocation();
-                            return null;
-                          },
-                          orElse: () {
-                            return null;
-                          },
-                        ),
-                        builder: (context, state) => state.maybeWhen(
-                          loading: () => ElevatedButton(
-                            onPressed: null,
-                            child: const CircularProgressIndicator().centered(),
-                          ),
-                          orElse: () => ElevatedButton(
-                            onPressed: widget.isEdit
-                                ? () {}
-                                : () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => Dialog(
-                                        child: VStack([
-                                          'Apakah anda yakin lokasi saat ini sudah akurat?'
-                                              .text
-                                              .base
-                                              .center
-                                              .makeCentered(),
-                                          const SizedBox(height: 12),
-                                          HStack([
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.yellow,
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: 'Tidak'.text.make(),
-                                            ).expand(),
-                                            const SizedBox(width: 12),
-                                            OutlinedButton(
-                                              onPressed: () {
-                                                cubit.addLokasi();
-                                              },
-                                              child: const Text(
-                                                'Tidak, tetap simpan',
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ).expand(),
-                                            const SizedBox(width: 12),
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.green,
-                                              ),
-                                              onPressed: () {
-                                                cubit.addLokasi();
-                                              },
-                                              child: const Text(
-                                                'Iya, simpan',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ).expand(),
-                                          ]),
-                                        ]).p16(),
-                                      ),
-                                    );
-                                  },
-                            child: 'Simpan'.text.base.make(),
-                          ),
-                        ),
-                      ).expand()
-                    : ElevatedButton(
-                        onPressed: () {
-                          continued(cubit, mapsCubit, locationCubit);
-                        },
-                        child: 'Lanjutkan'.text.base.make(),
-                      ).expand(),
-              )
-            ]).pOnly(top: 20);
+        return BlocBuilder<InfoLokasiCubit, InfoLokasiState>(
+          builder: (context, state) {
+            return Stepper(
+              controlsBuilder: (BuildContext context, ControlsDetails details) {
+                return HStack([
+                  OutlinedButton(
+                    onPressed: () {
+                      cancel();
+                    },
+                    child: 'Kembali'.text.base.make(),
+                  ).expand(),
+                  const SizedBox(width: 10),
+                  Builder(
+                    builder: (context) => isLastStep
+                        ? BlocConsumer<InfoLokasiCubit, InfoLokasiState>(
+                            listener: (context, state) => state.maybeWhen(
+                              added: () {
+                                Get.back();
+                                PopupMessages.successPopup(
+                                  'Berhasil menambahkan data lokasi',
+                                );
+                                context
+                                    .read<RefreshCubit>()
+                                    .refreshAdminLocation();
+                                return null;
+                              },
+                              orElse: () {
+                                return null;
+                              },
+                            ),
+                            builder: (context, state) => state.maybeWhen(
+                              loading: () => ElevatedButton(
+                                onPressed: null,
+                                child: const CircularProgressIndicator()
+                                    .centered(),
+                              ),
+                              orElse: () => ElevatedButton(
+                                onPressed: widget.isEdit
+                                    ? () {}
+                                    : () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => Dialog(
+                                            child: VStack([
+                                              'Apakah anda yakin lokasi saat ini sudah akurat?'
+                                                  .text
+                                                  .base
+                                                  .center
+                                                  .makeCentered(),
+                                              const SizedBox(height: 12),
+                                              HStack([
+                                                ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.yellow,
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: 'Tidak'.text.make(),
+                                                ).expand(),
+                                                const SizedBox(width: 12),
+                                                OutlinedButton(
+                                                  onPressed: () {
+                                                    cubit.addLokasi();
+                                                  },
+                                                  child: const Text(
+                                                    'Tidak, tetap simpan',
+                                                    style: TextStyle(
+                                                      fontSize: 10,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ).expand(),
+                                                const SizedBox(width: 12),
+                                                ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                  ),
+                                                  onPressed: () {
+                                                    cubit.addLokasi();
+                                                  },
+                                                  child: const Text(
+                                                    'Iya, simpan',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ).expand(),
+                                              ]),
+                                            ]).p16(),
+                                          ),
+                                        );
+                                      },
+                                child: 'Simpan'.text.base.make(),
+                              ),
+                            ),
+                          ).expand()
+                        : ElevatedButton(
+                            onPressed: () {
+                              continued(cubit, mapsCubit, locationCubit);
+                            },
+                            child: 'Lanjutkan'.text.base.make(),
+                          ).expand(),
+                  )
+                ]).pOnly(top: 20);
+              },
+              type: stepperType,
+              physics: const ScrollPhysics(),
+              currentStep: _currentStep,
+              onStepTapped: (step) => tapped(step),
+              steps: getSteps(cubit, mapsCubit, locationCubit, kelurahanCubit),
+            );
           },
-          type: stepperType,
-          physics: const ScrollPhysics(),
-          currentStep: _currentStep,
-          onStepTapped: (step) => tapped(step),
-          steps: getSteps(cubit, mapsCubit, locationCubit, kelurahanCubit),
         );
       },
     );
@@ -519,8 +530,16 @@ class __AddLokasiLayoutState extends State<_AddLokasiLayout> {
                     items: const [],
                     onChanged: (e) {},
                   ).box.width(Get.width).make().pOnly(bottom: 10),
-                  loaded: (kapanewon) => HStack([
+                  loaded: (kapanewon) => VStack([
                     DropdownButtonFormField(
+                      value: cubit.kelurahan == ''
+                          ? null
+                          : kapanewon
+                              .firstWhere(
+                                (element) =>
+                                    element.areaId == cubit.kapanewonId,
+                              )
+                              .districtId,
                       hint: 'Pilih Kelurahan'.text.lg.make(),
                       items: [
                         ...kapanewon
@@ -536,7 +555,7 @@ class __AddLokasiLayoutState extends State<_AddLokasiLayout> {
                       ],
                       validator: (value) {
                         if (value == null) {
-                          return 'Pilih Kapanewon';
+                          return 'Pilih Kelurahan';
                         }
                         return null;
                       },

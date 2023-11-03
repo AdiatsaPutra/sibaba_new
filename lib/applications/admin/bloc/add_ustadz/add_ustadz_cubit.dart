@@ -54,6 +54,8 @@ class AddUstadzCubit extends Cubit<AddUstadzState> {
   String tanggalLahir = '';
   String status = '';
 
+  File? image;
+
   void init(DetailUstadz detailUstadz) {
     nama.text = detailUstadz.ustadzs.nama;
     tempatLahir.text = detailUstadz.ustadzs.tmpLahir;
@@ -115,6 +117,12 @@ class AddUstadzCubit extends Cubit<AddUstadzState> {
     emit(const AddUstadzState.loaded());
   }
 
+  void setImage(File? file) {
+    emit(const AddUstadzState.loading());
+    image = file;
+    emit(const AddUstadzState.loaded());
+  }
+
   void addUstadz(File file, int userId) async {
     emit(const AddUstadzState.loading());
     final ustadzRequest = UstadzRequest(
@@ -150,7 +158,11 @@ class AddUstadzCubit extends Cubit<AddUstadzState> {
       s2C: s2c.text,
       s3: s3.text,
     );
-    final result = await _ustadzRepo.addUstadzs(file, ustadzRequest);
+    Logger().e(image);
+    Logger().e(file);
+    Logger().e(ustadzRequest.toJson());
+    final result =
+        await _ustadzRepo.addUstadzs(image ?? File(''), ustadzRequest);
     result.fold(
       (l) => emit(AddUstadzState.error(l.message)),
       (r) => emit(const AddUstadzState.success()),

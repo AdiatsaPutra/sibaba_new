@@ -19,7 +19,7 @@ class KelurahanRepoImpl extends KelurahanRepo {
         'Area_id': id,
         'district_name': name,
       };
-      final response = await dio.post(baseUrl + "kelurahan", data: data);
+      final response = await dio.post("${baseUrl}kelurahan", data: data);
       if (response.statusCode != 200) {
         throw AdminException(response.data);
       }
@@ -54,7 +54,7 @@ class KelurahanRepoImpl extends KelurahanRepo {
   Future<Either<AdminException, void>> deleteKelurahan(int id) async {
     try {
       final response = await dio.delete(
-        baseUrl + "kelurahan" + "/$id",
+        "${baseUrl}kelurahan/$id",
       );
       if (response.statusCode != 200) {
         throw AdminException(response.data);
@@ -69,7 +69,7 @@ class KelurahanRepoImpl extends KelurahanRepo {
   Future<Either<AdminException, List<Kelurahan>>> getKelurahan() async {
     try {
       final response = await dio.get(
-        baseUrl + "kelurahan",
+        "${baseUrl}kelurahan",
       );
       if (response.statusCode != 200) {
         throw AdminException(response.data);

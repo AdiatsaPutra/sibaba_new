@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sibaba/applications/info_lokasi/bloc/cubit/info_lokasi_cubit.dart';
 import 'package:sibaba/injection.dart';

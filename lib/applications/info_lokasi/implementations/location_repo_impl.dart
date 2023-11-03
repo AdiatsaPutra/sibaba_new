@@ -17,7 +17,7 @@ class LocationRepoImpl extends LocationRepo {
   Future<Either<LocationException, Location>> getLocations() async {
     try {
       final response = await dio.get(
-        baseUrl + "lokasi",
+        "${baseUrl}lokasi",
       );
       if (response.statusCode != 200) {
         throw LocationException(response.data);
@@ -35,7 +35,7 @@ class LocationRepoImpl extends LocationRepo {
       String slug) async {
     try {
       final response = await dio.get(
-        baseUrl + "lokasi/" + slug,
+        "${baseUrl}lokasi/$slug",
       );
       if (response.statusCode != 200) {
         throw LocationException(response.data);
@@ -53,7 +53,7 @@ class LocationRepoImpl extends LocationRepo {
       LocationRequest request) async {
     try {
       final response =
-          await dio.post(baseUrl + "lokasi", data: request.toJson());
+          await dio.post("${baseUrl}lokasi", data: request.toJson());
       if (response.statusCode != 201) {
         throw LocationException(response.data);
       }
@@ -66,11 +66,29 @@ class LocationRepoImpl extends LocationRepo {
   @override
   Future<Either<LocationException, void>> deleteLocation(int id) async {
     try {
-      final response = await dio.delete(baseUrl + "lokasi/$id");
+      final response = await dio.delete("${baseUrl}lokasi/$id");
       if (response.statusCode != 201) {
         throw LocationException(response.data);
       }
       return right(null);
+    } catch (e) {
+      return left(LocationException(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<LocationException, LocationDetail>> getLocationDetailById(
+      int id) async {
+    try {
+      final response = await dio.get(
+        "${baseUrl}lokasidetail/$id",
+      );
+      if (response.statusCode != 200) {
+        throw LocationException(response.data);
+      }
+      final data = response.data['data'];
+      final locationDetail = LocationDetail.fromMap(data);
+      return right(locationDetail);
     } catch (e) {
       return left(LocationException(e.toString()));
     }

@@ -22,7 +22,7 @@ class AdminUstadzImpl extends UstadzRepo {
   Future<Either<AdminException, List<Ustadz>>> getUstadz() async {
     try {
       final response = await dio.get(
-        baseUrl + "teacher/all",
+        "${baseUrl}teacher/all",
       );
       Logger().i(response);
       if (response.statusCode != 200) {
@@ -41,7 +41,7 @@ class AdminUstadzImpl extends UstadzRepo {
       int ustadzId) async {
     try {
       final response = await dio.get(
-        baseUrl + "teacher/$ustadzId",
+        "${baseUrl}teacher/$ustadzId",
       );
       if (response.statusCode != 200) {
         throw AdminException(response.data);
@@ -95,7 +95,7 @@ class AdminUstadzImpl extends UstadzRepo {
       });
       Logger().i(formData);
       final response = await dio.post(
-        baseUrl + "teacher",
+        "${baseUrl}teacher",
         data: formData,
       );
       if (response.statusCode != 200) {
@@ -111,7 +111,7 @@ class AdminUstadzImpl extends UstadzRepo {
   Future<Either<AdminException, void>> deleteUstadz(int id) async {
     try {
       final response = await dio.delete(
-        baseUrl + "teacher/$id",
+        "${baseUrl}teacher/$id",
       );
       if (response.statusCode != 200) {
         throw AdminException(response.data);

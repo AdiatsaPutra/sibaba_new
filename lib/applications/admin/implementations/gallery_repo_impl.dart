@@ -23,7 +23,7 @@ class GalleryRepoImpl extends GalleryRepo {
         "userId": userId,
       });
       await Api.createDio().post(
-        baseUrl + 'gallery',
+        '${baseUrl}gallery',
         data: formData,
       );
       return right(null);
@@ -36,7 +36,7 @@ class GalleryRepoImpl extends GalleryRepo {
   Future<Either<AdminException, void>> deleteGallery(int galleryId) async {
     try {
       await Api.createDio().delete(
-        baseUrl + 'gallery/$galleryId',
+        '${baseUrl}gallery/$galleryId',
       );
       return right(null);
     } catch (e) {

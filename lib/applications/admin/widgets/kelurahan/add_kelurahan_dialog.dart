@@ -32,7 +32,6 @@ class AddKelurahanDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Logger().i(kapanewon);
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(
@@ -66,7 +65,6 @@ class AddKelurahanDialog extends StatelessWidget {
                 hint: 'Pilih Kapanewon'.text.lg.make(),
                 items: [
                   ...kapanewon.map((e) {
-                    Logger().i(e);
                     return DropdownMenuItem<String>(
                       value: e.areaId.toString(),
                       child: e.areaName.text.lg.make(),

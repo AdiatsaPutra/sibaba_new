@@ -393,6 +393,7 @@ class _AddUstadzLayoutState extends State<_AddUstadzLayout> {
                 return GestureDetector(
                   onTap: () {
                     imageHandler.setImage();
+                    cubit.setImage(imageHandler.image);
                   },
                   child: imageHandler.image == null
                       ? VxBox(child: 'Pilih foto'.text.base.makeCentered())

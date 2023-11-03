@@ -37,7 +37,7 @@ class LocationCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-                '${location.photo == null ? '-' : location.photo!.fileLoc}'
+                (location.photo == null ? '-' : location.photo!.fileLoc)
                     .text
                     .lg
                     .bold

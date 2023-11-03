@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
 import 'package:sibaba/applications/admin/models/kelurahan.dart';
 import 'package:sibaba/applications/admin/repositories/kelurahan_repo.dart';
 

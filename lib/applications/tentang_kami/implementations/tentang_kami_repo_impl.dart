@@ -16,7 +16,7 @@ class TentangKamiRepoImpl extends TentangKamirepo {
   Future<Either<TentangKamiException, Tentang>> getTentangKami() async {
     try {
       final response = await dio.get(
-        baseUrl + "tentang",
+        "${baseUrl}tentang",
       );
       if (response.statusCode != 200) {
         throw LocationException(response.data);
@@ -34,7 +34,7 @@ class TentangKamiRepoImpl extends TentangKamirepo {
       String sejarah, String struktur, String visimisi) async {
     try {
       final response = await dio.put(
-        baseUrl + "profile",
+        "${baseUrl}profile",
         data: {
           "Struktur": struktur,
           "Sejarah": sejarah,

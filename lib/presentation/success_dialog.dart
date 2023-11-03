@@ -11,6 +11,10 @@ class SuccessDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      shape: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide.none,
+      ),
       child: VStack([
         Image.asset(
           image,
@@ -27,10 +31,6 @@ class SuccessDialog extends StatelessWidget {
           child: 'Ok'.text.base.color(Colors.white).make(),
         )
       ]).p16(),
-      shape: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide.none,
-      ),
     );
   }
 }

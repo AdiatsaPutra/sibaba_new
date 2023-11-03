@@ -22,7 +22,7 @@ class LoginRepoImpl extends LoginRepo {
         "password": password,
       };
       final response = await dio.post(
-        baseUrl + "login",
+        "${baseUrl}login",
         data: parameters,
         options: Options(
           headers: {'Content-Type': 'application/json'},
@@ -53,7 +53,7 @@ class LoginRepoImpl extends LoginRepo {
     try {
       final parameters = {"name": name, "email": email, "password": password};
       final response = await dio.post(
-        baseUrl + "register",
+        "${baseUrl}register",
         data: parameters,
         options: Options(
           headers: {'Content-Type': 'application/json'},

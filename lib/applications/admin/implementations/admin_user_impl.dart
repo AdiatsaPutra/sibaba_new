@@ -16,7 +16,7 @@ class AdminUserImpl extends AdminUserRepo {
   Future<Either<AdminException, List<User>>> getUsers() async {
     try {
       final response = await dio.get(
-        baseUrl + "users",
+        "${baseUrl}users",
       );
       if (response.statusCode != 200) {
         throw AdminException(response.data);
@@ -40,7 +40,7 @@ class AdminUserImpl extends AdminUserRepo {
         'password': password,
         'roles': role
       };
-      final response = await dio.post(baseUrl + "users", data: data);
+      final response = await dio.post("${baseUrl}users", data: data);
       if (response.statusCode != 200) {
         throw AdminException(response.data);
       }
@@ -54,7 +54,7 @@ class AdminUserImpl extends AdminUserRepo {
   Future<Either<AdminException, void>> deleteUser(int id) async {
     try {
       final response = await dio.delete(
-        baseUrl + "users" + "/$id",
+        "${baseUrl}users/$id",
       );
       if (response.statusCode != 200) {
         throw AdminException(response.data);
@@ -75,7 +75,7 @@ class AdminUserImpl extends AdminUserRepo {
         'password': password,
         'roles': role
       };
-      final response = await dio.put(baseUrl + "user/$id", data: data);
+      final response = await dio.put("${baseUrl}user/$id", data: data);
       if (response.statusCode != 200) {
         throw AdminException(response.data);
       }
@@ -91,7 +91,7 @@ class AdminUserImpl extends AdminUserRepo {
       final data = {
         'id': id,
       };
-      final response = await dio.post(baseUrl + "profile", data: data);
+      final response = await dio.post("${baseUrl}profile", data: data);
       if (response.statusCode != 200) {
         throw AdminException(response.data);
       }

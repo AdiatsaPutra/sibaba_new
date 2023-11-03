@@ -6,7 +6,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
 import 'package:sibaba/applications/info_lokasi/model/location.dart';
 import 'package:sibaba/applications/info_lokasi/model/location_detail.dart';
 import 'package:sibaba/applications/info_lokasi/model/request/location_request.dart';
@@ -86,19 +85,18 @@ class InfoLokasiCubit extends Cubit<InfoLokasiState> {
     sk.text = l.detailLokasi.skPendirian!;
     tempatBelajar.text = l.detailLokasi.tmpBelajar;
     email.text = l.detailLokasi.email!;
-    akreditasi = l.detailLokasi.akreditasi;
+    akreditasi =
+        l.detailLokasi.akreditasi == '-' ? '' : l.detailLokasi.akreditasi;
     tanggalAkreditasi.text = l.detailLokasi.tglAkreditasi.toString();
     direktur.text = l.detailLokasi.direktur;
     tanggalBerdiri.text = l.detailLokasi.tglBerdiri.toString();
-    status = l.detailLokasi.status;
+    status = l.detailLokasi.status == '-' ? '' : l.detailLokasi.status;
     deskripsiText = l.detailLokasi.deskripsi;
-    status = l.detailLokasi.status;
     tanggalBerdiri.text = l.detailLokasi.tglBerdiri.toString();
     tanggalAkreditasi.text = l.detailLokasi.tglAkreditasi.toString();
     hariMasuk = 'senin';
     jamMasuk.text = l.waktuMasuk;
     jamKeluar.text = l.waktuSelesai;
-    kapanewon = l.detailLokasi.areaUnit;
     kapanewon = l.detailLokasi.areaUnit;
     kelurahan = l.detailLokasi.districtUnit;
     lat.text = l.maps.latitude.toString();
@@ -251,6 +249,15 @@ class InfoLokasiCubit extends Cubit<InfoLokasiState> {
   void getLocationDetail(String slug) async {
     emit(const InfoLokasiState.loading());
     final locationDetail = await _locationRepo.getLocationDetail(slug);
+    locationDetail.fold(
+      (l) => emit(InfoLokasiState.error(l.message)),
+      (r) => emit(InfoLokasiState.detailLoaded(r)),
+    );
+  }
+
+  void getLocationDetailById(int id) async {
+    emit(const InfoLokasiState.loading());
+    final locationDetail = await _locationRepo.getLocationDetailById(id);
     locationDetail.fold(
       (l) => emit(InfoLokasiState.error(l.message)),
       (r) => emit(InfoLokasiState.detailLoaded(r)),

@@ -211,7 +211,14 @@ class _DashboardLayoutState extends State<_DashboardLayout> {
                         SuperadminMenu(user: widget.user),
                       ])
                     : e.name == 'admin'
-                        ? AdminMenu(user: widget.user)
+                        ? AdminMenu(
+                            user: widget.user,
+                            id: widget.locations.lokasi
+                                    .firstWhere((element) =>
+                                        element.userId == widget.user.id)
+                                    .locationId ??
+                                0,
+                          )
                         : GuestMenu(
                             name: widget.user.name,
                           ),

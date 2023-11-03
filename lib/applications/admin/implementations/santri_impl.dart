@@ -22,7 +22,7 @@ class SantriImpl extends SantriRepo {
   Future<Either<AdminException, List<Santri>>> getSantri() async {
     try {
       final response = await dio.get(
-        baseUrl + "santri",
+        "${baseUrl}santri",
       );
       if (response.statusCode != 200) {
         throw AdminException(response.data);
@@ -39,7 +39,7 @@ class SantriImpl extends SantriRepo {
   Future<Either<AdminException, void>> deleteSantri(int id) async {
     try {
       final response = await dio.delete(
-        baseUrl + "santri/$id",
+        "${baseUrl}santri/$id",
       );
       if (response.statusCode != 200) {
         throw AdminException(response.data);
@@ -69,7 +69,7 @@ class SantriImpl extends SantriRepo {
             await MultipartFile.fromFile(fileSantri.path, filename: fileName),
       });
       await Api.createDio().post(
-        baseUrl + 'santri',
+        '${baseUrl}santri',
         data: formData,
       );
       return right(null);
@@ -92,7 +92,7 @@ class SantriImpl extends SantriRepo {
               await MultipartFile.fromFile(fileSantri.path, filename: fileName),
         });
         await Api.createDio().put(
-          baseUrl + 'santri/$santriId',
+          '${baseUrl}santri/$santriId',
           data: formData,
         );
       } else {
@@ -102,7 +102,7 @@ class SantriImpl extends SantriRepo {
           "Tahun_ajaran": tahunAjaran,
         });
         await Api.createDio().put(
-          baseUrl + 'santri/$santriId',
+          '${baseUrl}santri/$santriId',
           data: formData,
         );
       }
@@ -127,13 +127,13 @@ class SantriImpl extends SantriRepo {
       dir = appDir!.path;
 
       final response =
-          await http.get(Uri.parse(baseUrl + "santri/download/$id"));
+          await http.get(Uri.parse("${baseUrl}santri/download/$id"));
 
       final fn = response.headers['filename'];
       final file = File('$dir/$fn.xlsx');
-      final _data = response.bodyBytes;
+      final data = response.bodyBytes;
       var raf = file.openSync(mode: FileMode.write);
-      raf.writeFromSync(_data);
+      raf.writeFromSync(data);
       await raf.close();
       await open.OpenFilex.open(file.path);
       if (response.statusCode != 200) {
