@@ -37,21 +37,25 @@ class _PesanLayout extends StatelessWidget {
               error: (m) => m.text.base.makeCentered(),
               messageLoaded: (m) => VStack([
                 ...m.map(
-                  (e) => ExpansionTile(
-                    textColor: primaryColor,
-                    iconColor: primaryColor,
-                    title: e.fullname.text.base.bold.make(),
-                    childrenPadding: const EdgeInsets.all(16),
-                    children: [
-                      e.message.text.base.make(),
-                    ],
-                  )
-                      .box
-                      .color(Colors.white)
-                      .rounded
-                      .outerShadowXl
-                      .make()
-                      .pOnly(bottom: 10),
+                  (e) => Theme(
+                    data:
+                        ThemeData().copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      textColor: primaryColor,
+                      iconColor: primaryColor,
+                      title: e.fullname.text.base.bold.make(),
+                      childrenPadding: const EdgeInsets.all(16),
+                      children: [
+                        e.message.text.base.make(),
+                      ],
+                    )
+                        .box
+                        .color(Colors.white)
+                        .rounded
+                        .outerShadowXl
+                        .make()
+                        .pOnly(bottom: 10),
+                  ),
                 )
               ]),
               orElse: () => const SizedBox(),

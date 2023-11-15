@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 import 'package:sibaba/applications/admin/bloc/add_kelurahan/add_kelurahan_cubit.dart';
 import 'package:sibaba/applications/admin/bloc/kelurahan/kelurahan_cubit.dart';
 import 'package:sibaba/applications/admin/models/kapanewon.dart';

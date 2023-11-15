@@ -6,5 +6,6 @@ class AddUstadzState with _$AddUstadzState {
   const factory AddUstadzState.loading() = _Loading;
   const factory AddUstadzState.loaded() = _Loaded;
   const factory AddUstadzState.success() = _Success;
+  const factory AddUstadzState.updated() = _Updated;
   const factory AddUstadzState.error(String message) = _Error;
 }

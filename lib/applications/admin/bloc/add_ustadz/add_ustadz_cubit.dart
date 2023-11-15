@@ -6,8 +6,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:sibaba/applications/admin/models/request/ustadz_request.dart';
+import 'package:sibaba/applications/admin/models/ustadz.dart';
 import 'package:sibaba/applications/admin/models/ustadz_detail.dart';
 import 'package:sibaba/applications/admin/repositories/ustadz_repo.dart';
+import 'package:sibaba/applications/info_lokasi/model/location.dart';
 
 part 'add_ustadz_state.dart';
 part 'add_ustadz_cubit.freezed.dart';
@@ -56,41 +58,46 @@ class AddUstadzCubit extends Cubit<AddUstadzState> {
 
   File? image;
 
-  void init(DetailUstadz detailUstadz) {
+  void init(DetailUstadz detailUstadz, {required LocationInfo location}) {
+    Logger().e(location);
+    lokasi.text = location.lokasi
+            .firstWhere(
+                (element) => element.locationId == detailUstadz.ustadzs.locId)
+            .nama ??
+        '';
     nama.text = detailUstadz.ustadzs.nama;
     tempatLahir.text = detailUstadz.ustadzs.tmpLahir;
     alamatLengkap.text = detailUstadz.ustadzs.alamat;
-    noHp.text = detailUstadz.ustadzs.telpon!;
-    email.text = detailUstadz.ustadzs.email!;
+    noHp.text = detailUstadz.ustadzs.telpon ?? '';
+    email.text = detailUstadz.ustadzs.email ?? '';
     mulaiMengajar.text = detailUstadz.ustadzs.mulaiUstadz;
-// lokasi.text = detailUstadz.ustadzs.;
     locationId = detailUstadz.ustadzs.locId;
 
     jenisKelamin = detailUstadz.ustadzs.gender;
     tanggalLahir = detailUstadz.ustadzs.tglLahir.toString();
     status = detailUstadz.status.status;
 
-    tk.text = detailUstadz.pendidikans.tk!;
-    tahuntk.text = detailUstadz.pendidikans.tkLulus!;
-    sd.text = detailUstadz.pendidikans.sd!;
-    tahunsd.text = detailUstadz.pendidikans.sdLulus!;
-    smp.text = detailUstadz.pendidikans.smp!;
-    tahunsmp.text = detailUstadz.pendidikans.smpLulus!;
-    sma.text = detailUstadz.pendidikans.sma!;
-    tahunsma.text = detailUstadz.pendidikans.smaLulus!;
-    perguruantinggi.text = detailUstadz.pendidikans.pt!;
-    tahunperguruantinggi.text = detailUstadz.pendidikans.ptLulus!;
+    tk.text = detailUstadz.pendidikans.tk ?? '';
+    tahuntk.text = detailUstadz.pendidikans.tkLulus ?? '';
+    sd.text = detailUstadz.pendidikans.sd ?? '';
+    tahunsd.text = detailUstadz.pendidikans.sdLulus ?? '';
+    smp.text = detailUstadz.pendidikans.smp ?? '';
+    tahunsmp.text = detailUstadz.pendidikans.smpLulus ?? '';
+    sma.text = detailUstadz.pendidikans.sma ?? '';
+    tahunsma.text = detailUstadz.pendidikans.smaLulus ?? '';
+    perguruantinggi.text = detailUstadz.pendidikans.pt ?? '';
+    tahunperguruantinggi.text = detailUstadz.pendidikans.ptLulus ?? '';
 
-    dasar.text = detailUstadz.pelatihans.dasar!;
-    mahir.text = detailUstadz.pelatihans.mahir1!;
-    mahir2.text = detailUstadz.pelatihans.mahir2!;
-    tot.text = detailUstadz.pelatihans.tot!;
+    dasar.text = detailUstadz.pelatihans.dasar ?? '';
+    mahir.text = detailUstadz.pelatihans.mahir1 ?? '';
+    mahir2.text = detailUstadz.pelatihans.mahir2 ?? '';
+    tot.text = detailUstadz.pelatihans.tot ?? '';
 
-    s1.text = detailUstadz.sertifikasis.s1!;
-    s2a.text = detailUstadz.sertifikasis.s2A!;
-    s2b.text = detailUstadz.sertifikasis.s2B!;
-    s2c.text = detailUstadz.sertifikasis.s2C!;
-    s3.text = detailUstadz.sertifikasis.s3!;
+    s1.text = detailUstadz.sertifikasis.s1 ?? '';
+    s2a.text = detailUstadz.sertifikasis.s2A ?? '';
+    s2b.text = detailUstadz.sertifikasis.s2B ?? '';
+    s2c.text = detailUstadz.sertifikasis.s2C ?? '';
+    s3.text = detailUstadz.sertifikasis.s3 ?? '';
   }
 
   void setLokasi(String value) {
@@ -120,6 +127,7 @@ class AddUstadzCubit extends Cubit<AddUstadzState> {
   void setImage(File? file) {
     emit(const AddUstadzState.loading());
     image = file;
+    Logger().e(image);
     emit(const AddUstadzState.loaded());
   }
 
@@ -158,14 +166,58 @@ class AddUstadzCubit extends Cubit<AddUstadzState> {
       s2C: s2c.text,
       s3: s3.text,
     );
-    Logger().e(image);
     Logger().e(file);
     Logger().e(ustadzRequest.toJson());
-    final result =
-        await _ustadzRepo.addUstadzs(image ?? File(''), ustadzRequest);
+    final result = await _ustadzRepo.addUstadzs(file, ustadzRequest);
     result.fold(
       (l) => emit(AddUstadzState.error(l.message)),
       (r) => emit(const AddUstadzState.success()),
+    );
+  }
+
+  void editUstadz(int ustadzId, File file, int userId) async {
+    emit(const AddUstadzState.loading());
+    final ustadzRequest = UstadzRequest(
+      userId: userId,
+      locationName: lokasi.text,
+      nama: nama.text,
+      gender: jenisKelamin,
+      tmpLahir: tempatLahir.text,
+      tglLahir: tanggalLahir,
+      alamat: alamatLengkap.text,
+      telpon: noHp.text,
+      email: email.text,
+      mulaiUstadz: mulaiMengajar.text,
+      status: status,
+      tAjar: lokasi.text,
+      tk: tk.text,
+      tkLulus: tahuntk.text,
+      sd: sd.text,
+      sdLulus: tahunsd.text,
+      smp: smp.text,
+      smpLulus: tahunsmp.text,
+      sma: sma.text,
+      smaLulus: tahunsma.text,
+      pt: perguruantinggi.text,
+      ptLulus: tahunperguruantinggi.text,
+      dasar: dasar.text,
+      mahir1: mahir.text,
+      mahir2: mahir2.text,
+      tot: tot.text,
+      s1: s1.text,
+      s2A: s2a.text,
+      s2B: s2b.text,
+      s2C: s2c.text,
+      s3: s3.text,
+    );
+    Logger().e(image);
+    Logger().e(file);
+    Logger().e(ustadzRequest.toJson());
+    final result = await _ustadzRepo.editUstadzs(
+        ustadzId, image ?? File(''), ustadzRequest);
+    result.fold(
+      (l) => emit(AddUstadzState.error(l.message)),
+      (r) => emit(const AddUstadzState.updated()),
     );
   }
 }

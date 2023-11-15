@@ -3,12 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sibaba/applications/admin/models/ustadz.dart';
 import 'package:sibaba/applications/admin/pages/detail_data_ustadz_page.dart';
 import 'package:sibaba/applications/admin/pages/ustadz/add_ustadz_page.dart';
+import 'package:sibaba/applications/info_lokasi/bloc/cubit/info_lokasi_cubit.dart';
+import 'package:sibaba/applications/info_lokasi/model/location.dart';
 import 'package:sibaba/injection.dart';
 import 'package:sibaba/presentation/color_constant.dart';
 import 'package:sibaba/presentation/widgets/custom_appbar.dart';
@@ -36,6 +37,9 @@ class DataUstadzPage extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => getIt<KapanewonCubit>()..getKapanewon(),
+          ),
+          BlocProvider(
+            create: (context) => getIt<InfoLokasiCubit>()..getLokasi(),
           ),
         ],
         child: MultiBlocListener(
@@ -78,7 +82,13 @@ class DataUstadzPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: primaryColor,
         onPressed: () {
-          Get.to(() => const AddUstadzPage());
+          Get.to(() => AddUstadzPage(
+                location: LocationInfo(
+                  lokasi: [],
+                  maps: [],
+                  events: [],
+                ),
+              ));
         },
         label: HStack([
           const Icon(Icons.add),
@@ -328,16 +338,22 @@ class UstadzData extends DataTableSource {
           DataCell(Text('${index + 1}'.toString())),
           DataCell(
             HStack([
-              GestureDetector(
-                onTap: () {
-                  Get.to(
-                    () => AddUstadzPage(
-                      isEdit: true,
-                      ustadzId: u[index].ustadzsId,
-                    ),
-                  );
-                },
-                child: const Icon(Icons.edit, color: Colors.yellow),
+              BlocBuilder<InfoLokasiCubit, InfoLokasiState>(
+                builder: (context, state) => state.maybeWhen(
+                  loaded: (locations) => GestureDetector(
+                    onTap: () {
+                      Get.to(
+                        () => AddUstadzPage(
+                          isEdit: true,
+                          location: locations,
+                          ustadzId: u[index].ustadzsId,
+                        ),
+                      );
+                    },
+                    child: const Icon(Icons.edit, color: Colors.yellow),
+                  ),
+                  orElse: () => const SizedBox(),
+                ),
               ),
               const SizedBox(width: 10),
               GestureDetector(

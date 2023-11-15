@@ -33,13 +33,13 @@ class MapsAllPage extends StatelessWidget {
       child: BlocBuilder<InfoLokasiCubit, InfoLokasiState>(
         builder: (context, state) => state.maybeWhen(
           loading: () => _DashboardLayout(
-            locations: Location(lokasi: [], maps: [], events: []),
+            locations: LocationInfo(lokasi: [], maps: [], events: []),
           ),
           loaded: (location) => _DashboardLayout(
             locations: location,
           ),
           orElse: () => _DashboardLayout(
-            locations: Location(lokasi: [], maps: [], events: []),
+            locations: LocationInfo(lokasi: [], maps: [], events: []),
           ),
         ),
       ),
@@ -48,7 +48,7 @@ class MapsAllPage extends StatelessWidget {
 }
 
 class _DashboardLayout extends StatefulWidget {
-  final Location locations;
+  final LocationInfo locations;
 
   const _DashboardLayout({Key? key, required this.locations}) : super(key: key);
 
@@ -87,7 +87,7 @@ class _DashboardLayoutState extends State<_DashboardLayout> {
     );
   }
 
-  Set<Marker> getmarkers(Location location) {
+  Set<Marker> getmarkers(LocationInfo location) {
     setState(() {
       for (var y in location.maps) {
         markers.add(

@@ -135,7 +135,7 @@ class __AddLokasiLayoutState extends State<_AddLokasiLayout> {
     final isLastStep = _currentStep == 3;
     return Builder(
       builder: (context) {
-        if (userCubit.user.roles[0].name != 'admin' && !widget.isEdit) {
+        if (userCubit.user.roles[0].name != 'admin') {
           return VStack([
             VStack([
               const SizedBox(height: 12),
@@ -187,44 +187,70 @@ class __AddLokasiLayoutState extends State<_AddLokasiLayout> {
                 ),
               ).wFull(context),
               const SizedBox(height: 12),
-              BlocBuilder<KelurahanCubit, KelurahanState>(
-                builder: (context, state) => state.maybeWhen(
-                  loading: () => DropdownButtonFormField<String>(
-                    hint: 'Loading'.text.lg.make(),
-                    items: const [],
-                    onChanged: (e) {},
-                  ),
-                  loaded: (kapanewon) => DropdownButtonFormField(
-                    hint: 'Pilih Kelurahan'.text.lg.make(),
-                    items: [
-                      ...kapanewon
-                          .where(
-                        (element) => element.areaId == cubit.kapanewonId,
-                      )
-                          .map((e) {
-                        return DropdownMenuItem(
-                          value: e.districtId,
-                          child: e.districtName.text.lg.make(),
-                        );
-                      }),
-                    ],
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Pilih Kapanewon';
-                      }
-                      return null;
-                    },
-                    onChanged: (e) {
-                      cubit.setKelurahan(e as int);
-                    },
-                  ),
-                  orElse: () => DropdownButtonFormField<String>(
-                    hint: 'Kelurahan'.text.lg.make(),
-                    items: const [],
-                    onChanged: (e) {},
-                  ),
-                ),
-              ).wFull(context),
+              BlocBuilder<InfoLokasiCubit, InfoLokasiState>(
+                builder: (context, state) {
+                  return BlocBuilder<KelurahanCubit, KelurahanState>(
+                    builder: (context, state) => state.maybeWhen(
+                      loading: () => DropdownButtonFormField<String>(
+                        hint: 'Loading'.text.lg.make(),
+                        items: const [],
+                        onChanged: (e) {},
+                      ).box.width(Get.width).make(),
+                      loaded: (kapanewon) => VStack([
+                        DropdownButtonFormField(
+                          value: cubit.kelurahan == ''
+                              ? null
+                              : kapanewon
+                                  .firstWhere(
+                                    (element) =>
+                                        element.areaId == cubit.kapanewonId,
+                                  )
+                                  .districtId,
+                          hint: 'Pilih Kelurahan'.text.lg.make(),
+                          items: [
+                            ...kapanewon
+                                .where(
+                              (element) => element.areaId == cubit.kapanewonId,
+                            )
+                                .map((e) {
+                              return DropdownMenuItem(
+                                value: e.districtId,
+                                child: e.districtName.text.lg.make(),
+                              );
+                            }),
+                          ],
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Pilih Kelurahan';
+                            }
+                            return null;
+                          },
+                          onChanged: (e) {
+                            cubit.setKelurahan(e as int);
+                          },
+                        ).box.width(Get.width).make(),
+                      ]),
+                      orElse: () => DropdownButtonFormField<String>(
+                        hint: 'Kelurahan'.text.lg.make(),
+                        items: const [],
+                        onChanged: (e) {},
+                      ).box.width(Get.width).make(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 12),
+              'Nama'.text.base.bold.make(),
+              FormFields.textFormField(
+                controller: cubit.nama,
+                hint: 'Nama *',
+                validator: (value) {
+                  if (value == "") {
+                    return 'Wajib diisi';
+                  }
+                  return null;
+                },
+              ),
               const SizedBox(height: 12),
               'Admin Unit'.text.base.bold.make(),
               BlocBuilder<UserCubit, UserState>(
@@ -235,6 +261,15 @@ class __AddLokasiLayoutState extends State<_AddLokasiLayout> {
                     onChanged: (e) {},
                   ),
                   loaded: (user) => DropdownButtonFormField(
+                    value: cubit.locationDetail != null
+                        ? user
+                            .where((element) =>
+                                element.roles[0].name == 'admin' &&
+                                element.id ==
+                                    cubit.locationDetail!.detailLokasi.userId)
+                            .first
+                            .id
+                        : null,
                     hint: 'Pilih Admin Unit'.text.lg.make(),
                     items: [
                       ...user

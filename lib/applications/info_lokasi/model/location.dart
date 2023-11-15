@@ -1,5 +1,5 @@
-class Location {
-  Location({
+class LocationInfo {
+  LocationInfo({
     required this.lokasi,
     required this.maps,
     required this.events,
@@ -9,7 +9,7 @@ class Location {
   final List<MapElement> maps;
   final List<dynamic> events;
 
-  factory Location.fromJson(Map<String, dynamic> json) => Location(
+  factory LocationInfo.fromJson(Map<String, dynamic> json) => LocationInfo(
         lokasi:
             List<Lokasi>.from(json["lokasi"].map((x) => Lokasi.fromJson(x))),
         maps: List<MapElement>.from(
@@ -69,8 +69,7 @@ class Lokasi {
         userId: json["User_id"],
         nspq: json["Nspq"],
         areaUnit: json["Area_unit"],
-        districtUnit:
-            json["District_unit"],
+        districtUnit: json["District_unit"],
         nama: json["Nama"],
         locSlug: json["Loc_slug"],
         alamat: json["Alamat"],
@@ -81,8 +80,7 @@ class Lokasi {
         akreditasi: json["Akreditasi"],
         tglBerdiri: DateTime.parse(json["Tgl_berdiri"]),
         direktur: json["Direktur"],
-        tglAkreditasi:
-            json["Tgl_akreditasi"],
+        tglAkreditasi: json["Tgl_akreditasi"],
         status: json["Status"],
         deskripsi: json["Deskripsi"],
         createdAt: DateTime.parse(json["created_at"]),

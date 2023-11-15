@@ -17,6 +17,7 @@ import 'package:sibaba/injection.dart';
 import 'package:sibaba/presentation/color_constant.dart';
 import 'package:sibaba/presentation/popup_messages.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 // import 'package:syncfusion_flutter_pdf/pdf.dart';
 // import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -192,7 +193,7 @@ class _LokasiLayout extends StatelessWidget {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                 onPressed: () {
-                  // saveExcel(locations);
+                  saveExcel(locations);
                 },
                 child: 'Excel'.text.base.make(),
               ).w(100).h(30),
@@ -300,58 +301,58 @@ class _LokasiLayout extends StatelessWidget {
     OpenFilex.open('$path/$fileName');
   }
 
-  // Future<void> saveExcel(List<Lokasi> lokasi) async {
-  //   final Workbook workbook = Workbook(1);
+  Future<void> saveExcel(List<Lokasi> lokasi) async {
+    final Workbook workbook = Workbook(1);
 
-  //   final Worksheet sheet = workbook.worksheets[0];
+    final Worksheet sheet = workbook.worksheets[0];
 
-  //   sheet.getRangeByName('A1:E1').setText('Data Lokasi TKA-TPA Badko Bantul');
-  //   sheet.getRangeByName('A1:E1').merge();
-  //   sheet.getRangeByName('A2').setText('No Induk');
-  //   sheet.getRangeByName('B2').setText('Nama');
-  //   sheet.getRangeByName('C2').setText('Kapanewon');
-  //   sheet.getRangeByName('D2').setText('Direktur');
-  //   sheet.getRangeByName('E2').setText('Alamat');
-  //   sheet
-  //       .getRangeByName('A${locations.length + 3}:E${locations.length + 3}')
-  //       .setText('*Lokasi yang sudah terdaftar di Badko Bantul*');
-  //   sheet
-  //       .getRangeByName('A${locations.length + 3}:E${locations.length + 3}')
-  //       .merge();
+    sheet.getRangeByName('A1:E1').setText('Data Lokasi TKA-TPA Badko Bantul');
+    sheet.getRangeByName('A1:E1').merge();
+    sheet.getRangeByName('A2').setText('No Induk');
+    sheet.getRangeByName('B2').setText('Nama');
+    sheet.getRangeByName('C2').setText('Kapanewon');
+    sheet.getRangeByName('D2').setText('Direktur');
+    sheet.getRangeByName('E2').setText('Alamat');
+    sheet
+        .getRangeByName('A${locations.length + 3}:E${locations.length + 3}')
+        .setText('*Lokasi yang sudah terdaftar di Badko Bantul*');
+    sheet
+        .getRangeByName('A${locations.length + 3}:E${locations.length + 3}')
+        .merge();
 
-  //   for (int i = 0; i < locations.length; i++) {
-  //     sheet
-  //         .getRangeByName('A${i + 3}')
-  //         .setText(locations[i].locationId.toString());
-  //     sheet.getRangeByName('A${i + 3}').columnWidth = 15;
-  //     sheet.getRangeByName('B${i + 3}').setText(locations[i].nama);
-  //     sheet.getRangeByName('B${i + 3}').columnWidth = 20;
-  //     sheet.getRangeByName('C${i + 3}').setText(locations[i].areaUnit);
-  //     sheet.getRangeByName('C${i + 3}').columnWidth = 10;
-  //     sheet.getRangeByName('D${i + 3}').setText(locations[i].direktur);
-  //     sheet.getRangeByName('D${i + 3}').columnWidth = 20;
-  //     sheet.getRangeByName('E${i + 3}').setText(locations[i].alamat);
-  //     sheet.getRangeByName('E${i + 3}').columnWidth = 50;
-  //   }
+    for (int i = 0; i < locations.length; i++) {
+      sheet
+          .getRangeByName('A${i + 3}')
+          .setText(locations[i].locationId.toString());
+      sheet.getRangeByName('A${i + 3}').columnWidth = 15;
+      sheet.getRangeByName('B${i + 3}').setText(locations[i].nama);
+      sheet.getRangeByName('B${i + 3}').columnWidth = 20;
+      sheet.getRangeByName('C${i + 3}').setText(locations[i].areaUnit);
+      sheet.getRangeByName('C${i + 3}').columnWidth = 10;
+      sheet.getRangeByName('D${i + 3}').setText(locations[i].direktur);
+      sheet.getRangeByName('D${i + 3}').columnWidth = 20;
+      sheet.getRangeByName('E${i + 3}').setText(locations[i].alamat);
+      sheet.getRangeByName('E${i + 3}').columnWidth = 50;
+    }
 
-  //   final Style headingStyle = workbook.styles.add('HeadingStyle');
-  //   headingStyle.bold = true;
-  //   headingStyle.hAlign = HAlignType.center;
-  //   headingStyle.wrapText = true;
-  //   sheet.getRangeByName('A1:E1').cellStyle = headingStyle;
-  //   sheet.getRangeByName('A2:E2').cellStyle = headingStyle;
-  //   sheet
-  //       .getRangeByName('A${locations.length + 3}:E${locations.length + 3}')
-  //       .cellStyle = headingStyle;
+    final Style headingStyle = workbook.styles.add('HeadingStyle');
+    headingStyle.bold = true;
+    headingStyle.hAlign = HAlignType.center;
+    headingStyle.wrapText = true;
+    sheet.getRangeByName('A1:E1').cellStyle = headingStyle;
+    sheet.getRangeByName('A2:E2').cellStyle = headingStyle;
+    sheet
+        .getRangeByName('A${locations.length + 3}:E${locations.length + 3}')
+        .cellStyle = headingStyle;
 
-  //   final List<int> bytes = workbook.saveAsStream();
-  //   workbook.dispose();
+    final List<int> bytes = workbook.saveAsStream();
+    workbook.dispose();
 
-  //   final path = (await getExternalStorageDirectory())!.path;
-  //   final file = File('$path/Output.xlsx');
-  //   await file.writeAsBytes(bytes, flush: true);
-  //   OpenFilex.open('$path/Output.xlsx');
-  // }
+    final path = (await getExternalStorageDirectory())!.path;
+    final file = File('$path/Output.xlsx');
+    await file.writeAsBytes(bytes, flush: true);
+    OpenFilex.open('$path/Output.xlsx');
+  }
 }
 
 class LokasiData extends DataTableSource {

@@ -61,7 +61,7 @@ class DashboardPage extends StatelessWidget {
               builder: (context, state) => state.maybeWhen(
                 loading: () => _DashboardLayout(
                   user: user,
-                  locations: Location(lokasi: [], maps: [], events: []),
+                  locations: LocationInfo(lokasi: [], maps: [], events: []),
                 ),
                 loaded: (location) => _DashboardLayout(
                   user: user,
@@ -69,7 +69,7 @@ class DashboardPage extends StatelessWidget {
                 ),
                 orElse: () => _DashboardLayout(
                   user: user,
-                  locations: Location(lokasi: [], maps: [], events: []),
+                  locations: LocationInfo(lokasi: [], maps: [], events: []),
                 ),
               ),
             ),
@@ -77,7 +77,7 @@ class DashboardPage extends StatelessWidget {
               builder: (context, state) => state.maybeWhen(
                 loading: () => _DashboardLayout(
                   user: u,
-                  locations: Location(lokasi: [], maps: [], events: []),
+                  locations: LocationInfo(lokasi: [], maps: [], events: []),
                 ),
                 loaded: (location) => _DashboardLayout(
                   user: u,
@@ -85,7 +85,7 @@ class DashboardPage extends StatelessWidget {
                 ),
                 orElse: () => _DashboardLayout(
                   user: u,
-                  locations: Location(lokasi: [], maps: [], events: []),
+                  locations: LocationInfo(lokasi: [], maps: [], events: []),
                 ),
               ),
             ),
@@ -93,7 +93,7 @@ class DashboardPage extends StatelessWidget {
               builder: (context, state) => state.maybeWhen(
                 loading: () => _DashboardLayout(
                   user: user,
-                  locations: Location(lokasi: [], maps: [], events: []),
+                  locations: LocationInfo(lokasi: [], maps: [], events: []),
                 ),
                 loaded: (location) => _DashboardLayout(
                   user: user,
@@ -101,7 +101,7 @@ class DashboardPage extends StatelessWidget {
                 ),
                 orElse: () => _DashboardLayout(
                   user: user,
-                  locations: Location(lokasi: [], maps: [], events: []),
+                  locations: LocationInfo(lokasi: [], maps: [], events: []),
                 ),
               ),
             ),
@@ -114,7 +114,7 @@ class DashboardPage extends StatelessWidget {
 
 class _DashboardLayout extends StatefulWidget {
   final User user;
-  final Location locations;
+  final LocationInfo locations;
 
   const _DashboardLayout(
       {Key? key, required this.user, required this.locations})
@@ -249,7 +249,7 @@ class _DashboardLayoutState extends State<_DashboardLayout> {
     );
   }
 
-  Set<Marker> getmarkers(Location location) {
+  Set<Marker> getmarkers(LocationInfo location) {
     setState(() {
       for (var y in location.maps) {
         for (var x in location.lokasi) {

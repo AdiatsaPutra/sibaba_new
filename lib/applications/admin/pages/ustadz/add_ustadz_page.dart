@@ -2,10 +2,10 @@ import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 import 'package:sibaba/applications/admin/models/ustadz_detail.dart';
 import 'package:sibaba/applications/admin/widgets/ustadz/ustadz_pelatihan_form.dart';
 import 'package:sibaba/applications/admin/widgets/ustadz/ustadz_pendidikan_formal_form.dart';
+import 'package:sibaba/applications/info_lokasi/model/location.dart';
 import 'package:sibaba/applications/login/bloc/login/login_cubit.dart';
 import 'package:sibaba/infrastructures/constant.dart';
 import 'package:sibaba/infrastructures/refresh/cubit/refresh_cubit.dart';
@@ -25,7 +25,10 @@ import '../../bloc/ustadz/ustadz_cubit.dart';
 class AddUstadzPage extends StatelessWidget {
   final bool isEdit;
   final int? ustadzId;
-  const AddUstadzPage({Key? key, this.isEdit = false, this.ustadzId})
+  final LocationInfo location;
+
+  const AddUstadzPage(
+      {Key? key, this.isEdit = false, this.ustadzId, required this.location})
       : super(key: key);
 
   @override
@@ -60,11 +63,16 @@ class AddUstadzPage extends StatelessWidget {
                   loading: () => const CircularProgressIndicator().centered(),
                   detailLoaded: (detail) => _AddUstadzLayout(
                     detailUstadz: detail,
+                    location: location,
+                    isEdit: isEdit,
+                    ustadzId: ustadzId,
                   ),
                   orElse: () => const SizedBox(),
                 ),
               )
-            : const _AddUstadzLayout(),
+            : _AddUstadzLayout(
+                location: LocationInfo(lokasi: [], maps: [], events: []),
+                isEdit: false),
       ),
     );
   }
@@ -72,7 +80,16 @@ class AddUstadzPage extends StatelessWidget {
 
 class _AddUstadzLayout extends StatefulWidget {
   final DetailUstadz? detailUstadz;
-  const _AddUstadzLayout({Key? key, this.detailUstadz}) : super(key: key);
+  final int? ustadzId;
+  final bool isEdit;
+  final LocationInfo location;
+  const _AddUstadzLayout(
+      {Key? key,
+      this.detailUstadz,
+      required this.location,
+      required this.isEdit,
+      this.ustadzId})
+      : super(key: key);
 
   @override
   State<_AddUstadzLayout> createState() => _AddUstadzLayoutState();
@@ -82,9 +99,19 @@ class _AddUstadzLayoutState extends State<_AddUstadzLayout> {
   @override
   initState() {
     super.initState();
-    widget.detailUstadz == null
-        ? null
-        : BlocProvider.of<AddUstadzCubit>(context).init(widget.detailUstadz!);
+    widget.detailUstadz == null ? null : init();
+  }
+
+  void init() async {
+    BlocProvider.of<AddUstadzCubit>(context)
+        .init(widget.detailUstadz!, location: widget.location);
+    final image = await BlocProvider.of<ImageHandlerCubit>(context).setImage(
+      fromOnline: true,
+      url:
+          'https://badkobantul.tatiumy.com/storage/fileUstadz/${widget.detailUstadz!.photo.photo}',
+    );
+    BlocProvider.of<AddUstadzCubit>(context).setImage(image);
+    // BlocProvider.of<AddUstadzCubit>(context).setLokasi(value)
   }
 
   int _currentStep = 0;
@@ -94,7 +121,6 @@ class _AddUstadzLayoutState extends State<_AddUstadzLayout> {
     final cubit = context.read<AddUstadzCubit>();
     final imageHandler = context.read<ImageHandlerCubit>();
     final isLastStep = _currentStep == 3;
-    Logger().i(isLastStep);
     return Column(
       children: [
         Expanded(
@@ -113,6 +139,11 @@ class _AddUstadzLayoutState extends State<_AddUstadzLayout> {
                     builder: (context) => isLastStep
                         ? BlocConsumer<AddUstadzCubit, AddUstadzState>(
                             listener: (context, state) => state.maybeWhen(
+                              updated: () {
+                                Navigator.pop(context);
+                                context.read<RefreshCubit>().refreshUstadz();
+                                return null;
+                              },
                               success: () {
                                 Navigator.pop(context);
                                 context.read<RefreshCubit>().refreshUstadz();
@@ -130,10 +161,16 @@ class _AddUstadzLayoutState extends State<_AddUstadzLayout> {
                               ),
                               orElse: () => ElevatedButton(
                                 onPressed: () {
-                                  cubit.addUstadz(
-                                    imageHandler.image!,
-                                    context.read<LoginCubit>().user.id,
-                                  );
+                                  widget.isEdit
+                                      ? cubit.editUstadz(
+                                          widget.ustadzId ?? 0,
+                                          imageHandler.image!,
+                                          context.read<LoginCubit>().user.id,
+                                        )
+                                      : cubit.addUstadz(
+                                          imageHandler.image!,
+                                          context.read<LoginCubit>().user.id,
+                                        );
                                 },
                                 child: 'Simpan'.text.base.make(),
                               ),

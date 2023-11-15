@@ -96,6 +96,29 @@ class DetailLokasiData {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
       );
+
+  Map<String, dynamic> toJson() => {
+        "Location_id": locationId,
+        "User_id": userId,
+        "Nspq": nspq,
+        "Area_unit": areaUnit,
+        "District_unit": districtUnit,
+        "Nama": nama,
+        "Loc_slug": locSlug,
+        "Alamat": alamat,
+        "Telp_unit": telpUnit,
+        "Sk_pendirian": skPendirian,
+        "Tmp_belajar": tmpBelajar,
+        "Email": email,
+        "Akreditasi": akreditasi,
+        "Tgl_berdiri": tglBerdiri?.toIso8601String(),
+        "Direktur": direktur,
+        "Tgl_akreditasi": tglAkreditasi,
+        "Status": status,
+        "Deskripsi": deskripsi,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+      };
 }
 
 class Foto {

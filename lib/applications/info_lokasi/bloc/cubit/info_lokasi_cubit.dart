@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:injectable/injectable.dart';
+import 'package:logger/logger.dart';
 import 'package:sibaba/applications/info_lokasi/model/location.dart';
 import 'package:sibaba/applications/info_lokasi/model/location_detail.dart';
 import 'package:sibaba/applications/info_lokasi/model/request/location_request.dart';
@@ -21,7 +22,7 @@ class InfoLokasiCubit extends Cubit<InfoLokasiState> {
 
   final LocationRepo _locationRepo;
 
-  Location location = Location(
+  LocationInfo location = LocationInfo(
     lokasi: [],
     maps: [],
     events: [],
@@ -57,6 +58,8 @@ class InfoLokasiCubit extends Cubit<InfoLokasiState> {
   DateTime? jmMasuk;
   DateTime? jmKeluar;
 
+  LocationDetail? locationDetail;
+
   int kapanewonId = 0;
   int kelurahanId = 0;
   int adminId = 0;
@@ -78,7 +81,9 @@ class InfoLokasiCubit extends Cubit<InfoLokasiState> {
   }
 
   void init({LocationDetail? l}) {
-    nspq.text = l!.detailLokasi.nspq!;
+    locationDetail = l;
+    Logger().e(l!.detailLokasi.toJson());
+    nspq.text = l.detailLokasi.nspq!;
     nama.text = l.detailLokasi.nama;
     alamat.text = l.detailLokasi.alamat;
     telepon.text = l.detailLokasi.telpUnit!;
@@ -202,7 +207,7 @@ class InfoLokasiCubit extends Cubit<InfoLokasiState> {
                 .contains(searchKeyword.text.toLowerCase()),
           )
           .toList();
-      var filteredLocation = Location(
+      var filteredLocation = LocationInfo(
         lokasi: filteredLokasi,
         maps: location.maps,
         events: location.events,
@@ -235,7 +240,7 @@ class InfoLokasiCubit extends Cubit<InfoLokasiState> {
               );
         },
       ).toList();
-      var filteredLocation = Location(
+      var filteredLocation = LocationInfo(
         lokasi: filteredLokasi,
         maps: location.maps,
         events: location.events,
@@ -271,7 +276,7 @@ class InfoLokasiCubit extends Cubit<InfoLokasiState> {
       nspq: nspq.text,
       areaUnit: kapanewonId,
       districtUnit: kelurahanId,
-      nama: '-',
+      nama: nama.text,
       locSlug: '',
       alamat: '-',
       telpUnit: '-',
@@ -282,7 +287,7 @@ class InfoLokasiCubit extends Cubit<InfoLokasiState> {
       tglBerdiri: DateTime(1900),
       direktur: '-',
       tglAkreditasi: DateTime(1900),
-      status: '-',
+      status: status,
       deskripsi: '-',
       hariMasuk: '-',
       masuk: '00:00',

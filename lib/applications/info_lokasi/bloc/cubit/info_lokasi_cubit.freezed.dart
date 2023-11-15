@@ -21,7 +21,7 @@ mixin _$InfoLokasiState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() picked,
-    required TResult Function(Location locations) loaded,
+    required TResult Function(LocationInfo locations) loaded,
     required TResult Function(LocationDetail location) detailLoaded,
     required TResult Function() added,
     required TResult Function() deleted,
@@ -33,7 +33,7 @@ mixin _$InfoLokasiState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? picked,
-    TResult? Function(Location locations)? loaded,
+    TResult? Function(LocationInfo locations)? loaded,
     TResult? Function(LocationDetail location)? detailLoaded,
     TResult? Function()? added,
     TResult? Function()? deleted,
@@ -45,7 +45,7 @@ mixin _$InfoLokasiState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? picked,
-    TResult Function(Location locations)? loaded,
+    TResult Function(LocationInfo locations)? loaded,
     TResult Function(LocationDetail location)? detailLoaded,
     TResult Function()? added,
     TResult Function()? deleted,
@@ -150,7 +150,7 @@ class _$_Initial implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() picked,
-    required TResult Function(Location locations) loaded,
+    required TResult Function(LocationInfo locations) loaded,
     required TResult Function(LocationDetail location) detailLoaded,
     required TResult Function() added,
     required TResult Function() deleted,
@@ -165,7 +165,7 @@ class _$_Initial implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? picked,
-    TResult? Function(Location locations)? loaded,
+    TResult? Function(LocationInfo locations)? loaded,
     TResult? Function(LocationDetail location)? detailLoaded,
     TResult? Function()? added,
     TResult? Function()? deleted,
@@ -180,7 +180,7 @@ class _$_Initial implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? picked,
-    TResult Function(Location locations)? loaded,
+    TResult Function(LocationInfo locations)? loaded,
     TResult Function(LocationDetail location)? detailLoaded,
     TResult Function()? added,
     TResult Function()? deleted,
@@ -287,7 +287,7 @@ class _$_Loading implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() picked,
-    required TResult Function(Location locations) loaded,
+    required TResult Function(LocationInfo locations) loaded,
     required TResult Function(LocationDetail location) detailLoaded,
     required TResult Function() added,
     required TResult Function() deleted,
@@ -302,7 +302,7 @@ class _$_Loading implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? picked,
-    TResult? Function(Location locations)? loaded,
+    TResult? Function(LocationInfo locations)? loaded,
     TResult? Function(LocationDetail location)? detailLoaded,
     TResult? Function()? added,
     TResult? Function()? deleted,
@@ -317,7 +317,7 @@ class _$_Loading implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? picked,
-    TResult Function(Location locations)? loaded,
+    TResult Function(LocationInfo locations)? loaded,
     TResult Function(LocationDetail location)? detailLoaded,
     TResult Function()? added,
     TResult Function()? deleted,
@@ -423,7 +423,7 @@ class _$_Picked implements _Picked {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() picked,
-    required TResult Function(Location locations) loaded,
+    required TResult Function(LocationInfo locations) loaded,
     required TResult Function(LocationDetail location) detailLoaded,
     required TResult Function() added,
     required TResult Function() deleted,
@@ -438,7 +438,7 @@ class _$_Picked implements _Picked {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? picked,
-    TResult? Function(Location locations)? loaded,
+    TResult? Function(LocationInfo locations)? loaded,
     TResult? Function(LocationDetail location)? detailLoaded,
     TResult? Function()? added,
     TResult? Function()? deleted,
@@ -453,7 +453,7 @@ class _$_Picked implements _Picked {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? picked,
-    TResult Function(Location locations)? loaded,
+    TResult Function(LocationInfo locations)? loaded,
     TResult Function(LocationDetail location)? detailLoaded,
     TResult Function()? added,
     TResult Function()? deleted,
@@ -525,7 +525,7 @@ abstract class _$$_LoadedCopyWith<$Res> {
   factory _$$_LoadedCopyWith(_$_Loaded value, $Res Function(_$_Loaded) then) =
       __$$_LoadedCopyWithImpl<$Res>;
   @useResult
-  $Res call({Location locations});
+  $Res call({LocationInfo locations});
 }
 
 /// @nodoc
@@ -544,7 +544,7 @@ class __$$_LoadedCopyWithImpl<$Res>
       null == locations
           ? _value.locations
           : locations // ignore: cast_nullable_to_non_nullable
-              as Location,
+              as LocationInfo,
     ));
   }
 }
@@ -555,7 +555,7 @@ class _$_Loaded implements _Loaded {
   const _$_Loaded(this.locations);
 
   @override
-  final Location locations;
+  final LocationInfo locations;
 
   @override
   String toString() {
@@ -586,7 +586,7 @@ class _$_Loaded implements _Loaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() picked,
-    required TResult Function(Location locations) loaded,
+    required TResult Function(LocationInfo locations) loaded,
     required TResult Function(LocationDetail location) detailLoaded,
     required TResult Function() added,
     required TResult Function() deleted,
@@ -601,7 +601,7 @@ class _$_Loaded implements _Loaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? picked,
-    TResult? Function(Location locations)? loaded,
+    TResult? Function(LocationInfo locations)? loaded,
     TResult? Function(LocationDetail location)? detailLoaded,
     TResult? Function()? added,
     TResult? Function()? deleted,
@@ -616,7 +616,7 @@ class _$_Loaded implements _Loaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? picked,
-    TResult Function(Location locations)? loaded,
+    TResult Function(LocationInfo locations)? loaded,
     TResult Function(LocationDetail location)? detailLoaded,
     TResult Function()? added,
     TResult Function()? deleted,
@@ -680,9 +680,9 @@ class _$_Loaded implements _Loaded {
 }
 
 abstract class _Loaded implements InfoLokasiState {
-  const factory _Loaded(final Location locations) = _$_Loaded;
+  const factory _Loaded(final LocationInfo locations) = _$_Loaded;
 
-  Location get locations;
+  LocationInfo get locations;
   @JsonKey(ignore: true)
   _$$_LoadedCopyWith<_$_Loaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -756,7 +756,7 @@ class _$_DetailLoaded implements _DetailLoaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() picked,
-    required TResult Function(Location locations) loaded,
+    required TResult Function(LocationInfo locations) loaded,
     required TResult Function(LocationDetail location) detailLoaded,
     required TResult Function() added,
     required TResult Function() deleted,
@@ -771,7 +771,7 @@ class _$_DetailLoaded implements _DetailLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? picked,
-    TResult? Function(Location locations)? loaded,
+    TResult? Function(LocationInfo locations)? loaded,
     TResult? Function(LocationDetail location)? detailLoaded,
     TResult? Function()? added,
     TResult? Function()? deleted,
@@ -786,7 +786,7 @@ class _$_DetailLoaded implements _DetailLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? picked,
-    TResult Function(Location locations)? loaded,
+    TResult Function(LocationInfo locations)? loaded,
     TResult Function(LocationDetail location)? detailLoaded,
     TResult Function()? added,
     TResult Function()? deleted,
@@ -897,7 +897,7 @@ class _$_Added implements _Added {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() picked,
-    required TResult Function(Location locations) loaded,
+    required TResult Function(LocationInfo locations) loaded,
     required TResult Function(LocationDetail location) detailLoaded,
     required TResult Function() added,
     required TResult Function() deleted,
@@ -912,7 +912,7 @@ class _$_Added implements _Added {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? picked,
-    TResult? Function(Location locations)? loaded,
+    TResult? Function(LocationInfo locations)? loaded,
     TResult? Function(LocationDetail location)? detailLoaded,
     TResult? Function()? added,
     TResult? Function()? deleted,
@@ -927,7 +927,7 @@ class _$_Added implements _Added {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? picked,
-    TResult Function(Location locations)? loaded,
+    TResult Function(LocationInfo locations)? loaded,
     TResult Function(LocationDetail location)? detailLoaded,
     TResult Function()? added,
     TResult Function()? deleted,
@@ -1034,7 +1034,7 @@ class _$_Deleted implements _Deleted {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() picked,
-    required TResult Function(Location locations) loaded,
+    required TResult Function(LocationInfo locations) loaded,
     required TResult Function(LocationDetail location) detailLoaded,
     required TResult Function() added,
     required TResult Function() deleted,
@@ -1049,7 +1049,7 @@ class _$_Deleted implements _Deleted {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? picked,
-    TResult? Function(Location locations)? loaded,
+    TResult? Function(LocationInfo locations)? loaded,
     TResult? Function(LocationDetail location)? detailLoaded,
     TResult? Function()? added,
     TResult? Function()? deleted,
@@ -1064,7 +1064,7 @@ class _$_Deleted implements _Deleted {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? picked,
-    TResult Function(Location locations)? loaded,
+    TResult Function(LocationInfo locations)? loaded,
     TResult Function(LocationDetail location)? detailLoaded,
     TResult Function()? added,
     TResult Function()? deleted,
@@ -1196,7 +1196,7 @@ class _$_Error implements _Error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() picked,
-    required TResult Function(Location locations) loaded,
+    required TResult Function(LocationInfo locations) loaded,
     required TResult Function(LocationDetail location) detailLoaded,
     required TResult Function() added,
     required TResult Function() deleted,
@@ -1211,7 +1211,7 @@ class _$_Error implements _Error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? picked,
-    TResult? Function(Location locations)? loaded,
+    TResult? Function(LocationInfo locations)? loaded,
     TResult? Function(LocationDetail location)? detailLoaded,
     TResult? Function()? added,
     TResult? Function()? deleted,
@@ -1226,7 +1226,7 @@ class _$_Error implements _Error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? picked,
-    TResult Function(Location locations)? loaded,
+    TResult Function(LocationInfo locations)? loaded,
     TResult Function(LocationDetail location)? detailLoaded,
     TResult Function()? added,
     TResult Function()? deleted,
