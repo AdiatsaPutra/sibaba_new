@@ -90,8 +90,9 @@ class SantriImpl extends SantriRepo {
           "Tahun_ajaran": tahunAjaran,
           "File":
               await MultipartFile.fromFile(fileSantri.path, filename: fileName),
+          "_method": "PUT"
         });
-        await Api.createDio().put(
+        await Api.createDio().post(
           '${baseUrl}santri/$santriId',
           data: formData,
         );
@@ -100,8 +101,9 @@ class SantriImpl extends SantriRepo {
           "Wilayah": wilayah,
           "Unit": unit,
           "Tahun_ajaran": tahunAjaran,
+          "_method": "PUT"
         });
-        await Api.createDio().put(
+        await Api.createDio().post(
           '${baseUrl}santri/$santriId',
           data: formData,
         );

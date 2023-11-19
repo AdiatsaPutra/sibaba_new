@@ -160,9 +160,10 @@ class AdminUstadzImpl extends UstadzRepo {
         "S2B": ustadzRequest.s2B,
         "S2C": ustadzRequest.s2C,
         "S3": ustadzRequest.s3,
+        "_method": "PUT",
       });
       Logger().i(formData);
-      final response = await dio.put(
+      final response = await dio.post(
         "${baseUrl}teacher/$id",
         data: formData,
       );

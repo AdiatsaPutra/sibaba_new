@@ -5,7 +5,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:logger/logger.dart';
 import 'package:sibaba/applications/admin/repositories/santri_repo.dart';
+import 'package:sibaba/infrastructures/download_image.dart';
 
 import '../../models/santri.dart';
 
@@ -33,14 +35,21 @@ class SantriCubit extends Cubit<SantriState> {
 
   File? fileSantri;
 
-  void init(Santri? santri) {
+  void init(Santri? santri) async {
+    emit(const SantriState.loading());
     if (santri != null) {
       santriId = santri.id;
       isEdit = true;
       wilayah.text = santri.wilayah;
       unit.text = santri.unit;
       tahunAjaran.text = santri.tahunAjaran;
+      final image = await downloadImage(
+        'https://badkobantul.tatiumy.com/storage/fileSantri/${santri.file}',
+      );
+      Logger().e(image);
+      fileSantri = image;
     }
+    emit(const SantriState.loaded());
   }
 
   void setFile() async {
@@ -116,7 +125,7 @@ class SantriCubit extends Cubit<SantriState> {
     );
     ustadzs.fold(
       (l) => emit(SantriState.error(l.message)),
-      (r) => emit(const SantriState.deleted()),
+      (r) => emit(const SantriState.updated()),
     );
   }
 

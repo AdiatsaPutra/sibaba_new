@@ -87,26 +87,28 @@ class _DatSantriLayout extends StatelessWidget {
           builder: (context, state) => state.maybeWhen(
             loading: () => const CircularProgressIndicator().centered(),
             error: (message) => message.text.make(),
-            success: (s) => VStack(
-              [
-                PaginatedDataTable(
-                  source: MyData(context, s, user, cubit),
-                  header: 'Data Santri'.text.xl.make(),
-                  columns: const [
-                    DataColumn(label: Text('No')),
-                    DataColumn(label: Text('Aksi')),
-                    DataColumn(label: Text('Wilayah')),
-                    DataColumn(label: Text('Unit')),
-                    DataColumn(label: Text('Tahun Ajaran')),
-                    DataColumn(label: Text('File')),
-                  ],
-                  columnSpacing: 20,
-                  horizontalMargin: 10,
-                  rowsPerPage: s.length > 5 ? 5 : s.length,
-                  showCheckboxColumn: false,
-                ),
-              ],
-            ),
+            success: (s) => s.isEmpty
+                ? 'Belum ada data'.text.makeCentered()
+                : VStack(
+                    [
+                      PaginatedDataTable(
+                        source: MyData(context, s, user, cubit),
+                        header: 'Data Santri'.text.xl.make(),
+                        columns: const [
+                          DataColumn(label: Text('No')),
+                          DataColumn(label: Text('Aksi')),
+                          DataColumn(label: Text('Wilayah')),
+                          DataColumn(label: Text('Unit')),
+                          DataColumn(label: Text('Tahun Ajaran')),
+                          DataColumn(label: Text('File')),
+                        ],
+                        columnSpacing: 20,
+                        horizontalMargin: 10,
+                        rowsPerPage: s.length > 5 ? 5 : s.length,
+                        showCheckboxColumn: false,
+                      ),
+                    ],
+                  ),
             orElse: () => const SizedBox(),
           ),
         ),

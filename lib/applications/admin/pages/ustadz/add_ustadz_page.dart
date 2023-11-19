@@ -141,12 +141,12 @@ class _AddUstadzLayoutState extends State<_AddUstadzLayout> {
                             listener: (context, state) => state.maybeWhen(
                               updated: () {
                                 Navigator.pop(context);
-                                context.read<RefreshCubit>().refreshUstadz();
+                                context.read<RefreshCubit>().ustadzUpdated();
                                 return null;
                               },
                               success: () {
                                 Navigator.pop(context);
-                                context.read<RefreshCubit>().refreshUstadz();
+                                context.read<RefreshCubit>().ustadzAdded();
                                 return null;
                               },
                               orElse: () {

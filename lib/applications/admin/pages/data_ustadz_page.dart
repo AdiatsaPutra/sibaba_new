@@ -51,6 +51,11 @@ class DataUstadzPage extends StatelessWidget {
                   PopupMessages.successPopup('Berhasil menambahkan ustadz');
                   return null;
                 },
+                ustadzUpdated: () {
+                  context.read<UstadzCubit>().getUstadzs();
+                  PopupMessages.successPopup('Berhasil mengubah ustadz');
+                  return null;
+                },
                 orElse: () {
                   return null;
                 },

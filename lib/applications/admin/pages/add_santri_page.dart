@@ -103,6 +103,11 @@ class _AddSantriLayout extends StatelessWidget {
               context.read<RefreshCubit>().santriAdded();
               return null;
             },
+            updated: () {
+              Navigator.pop(context);
+              context.read<RefreshCubit>().santriAdded();
+              return null;
+            },
             error: (message) => PopupMessages.errorPopup(message),
             orElse: () {
               return null;
