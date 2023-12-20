@@ -93,4 +93,20 @@ class LocationRepoImpl extends LocationRepo {
       return left(LocationException(e.toString()));
     }
   }
+
+  @override
+  Future<Either<LocationException, void>> updateLocation(
+      LocationRequest request) async {
+    try {
+      final json = request.toJson();
+      json['_method'] = 'PUT';
+      final response = await dio.put("${baseUrl}lokasi", data: json);
+      if (response.statusCode != 201) {
+        throw LocationException(response.data);
+      }
+      return right(null);
+    } catch (e) {
+      return left(LocationException(e.toString()));
+    }
+  }
 }

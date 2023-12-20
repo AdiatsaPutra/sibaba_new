@@ -87,6 +87,33 @@ class Lokasi {
         updatedAt: DateTime.parse(json["updated_at"]),
         photo: json["photo"] == null ? null : Photo.fromJson(json["photo"]),
       );
+
+  Map<String, dynamic> toJson() {
+    return {
+      "Location_id": locationId,
+      "User_id": userId,
+      "Nspq": nspq,
+      "Area_unit": areaUnit,
+      "District_unit": districtUnit,
+      "Nama": nama,
+      "Loc_slug": locSlug,
+      "Alamat": alamat,
+      "Telp_unit": telpUnit,
+      "Sk_pendirian": skPendirian,
+      "Tmp_belajar": tmpBelajar,
+      "Email": email,
+      "Akreditasi": akreditasi,
+      "Tgl_berdiri":
+          tglBerdiri?.toIso8601String(), // convert DateTime to String
+      "Direktur": direktur,
+      "Tgl_akreditasi": tglAkreditasi,
+      "Status": status,
+      "Deskripsi": deskripsi,
+      "created_at": createdAt?.toIso8601String(), // convert DateTime to String
+      "updated_at": updatedAt?.toIso8601String(), // convert DateTime to String
+      "photo": photo?.toJson(), // assuming Photo class has a toJson method
+    };
+  }
 }
 
 class Photo {

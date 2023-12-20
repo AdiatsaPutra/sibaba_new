@@ -1,4 +1,6 @@
 import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:sibaba/applications/admin/bloc/kelurahan/kelurahan_cubit.dart';
 import 'package:sibaba/applications/admin/bloc/location/location_cubit.dart';
@@ -40,6 +43,7 @@ class AddLokasiPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Logger().e(latLng);
     return Scaffold(
       appBar: CustomAppbar(
         title: isEdit == true ? 'Edit Lokasi' : 'Tambah Lokasi',
@@ -47,11 +51,19 @@ class AddLokasiPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (context) => MapsCubit()
-              ..setInitialPosition(latLng)
-              ..changeMarkerposition(latLng),
-          ),
+          isEdit == true
+              ? BlocProvider(
+                  create: (context) => MapsCubit()
+                    ..setInitialPosition(LatLng(locationDetail!.maps.latitude,
+                        locationDetail!.maps.longitude))
+                    ..changeMarkerposition(LatLng(locationDetail!.maps.latitude,
+                        locationDetail!.maps.longitude)),
+                )
+              : BlocProvider(
+                  create: (context) => MapsCubit()
+                    ..setInitialPosition(latLng)
+                    ..changeMarkerposition(latLng),
+                ),
           isEdit == true
               ? BlocProvider(
                   create: (context) => LocationCubit()
@@ -344,6 +356,14 @@ class __AddLokasiLayoutState extends State<_AddLokasiLayout> {
                   context.read<RefreshCubit>().refreshAdminLocation();
                   return null;
                 },
+                error: (message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: 'Terjadi Kesalahan'.text.make(),
+                    ),
+                  );
+                  return null;
+                },
                 orElse: () {
                   return null;
                 },
@@ -394,67 +414,73 @@ class __AddLokasiLayoutState extends State<_AddLokasiLayout> {
                                     .centered(),
                               ),
                               orElse: () => ElevatedButton(
-                                onPressed: widget.isEdit
-                                    ? () {}
-                                    : () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => Dialog(
-                                            child: VStack([
-                                              'Apakah anda yakin lokasi saat ini sudah akurat?'
-                                                  .text
-                                                  .base
-                                                  .center
-                                                  .makeCentered(),
-                                              const SizedBox(height: 12),
-                                              HStack([
-                                                ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.yellow,
-                                                  ),
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: 'Tidak'.text.make(),
-                                                ).expand(),
-                                                const SizedBox(width: 12),
-                                                OutlinedButton(
-                                                  onPressed: () {
-                                                    cubit.addLokasi();
-                                                  },
-                                                  child: const Text(
-                                                    'Tidak, tetap simpan',
-                                                    style: TextStyle(
-                                                      fontSize: 10,
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ).expand(),
-                                                const SizedBox(width: 12),
-                                                ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.green,
-                                                  ),
-                                                  onPressed: () {
-                                                    cubit.addLokasi();
-                                                  },
-                                                  child: const Text(
-                                                    'Iya, simpan',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ).expand(),
-                                              ]),
-                                            ]).p16(),
-                                          ),
-                                        );
-                                      },
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => MultiBlocProvider(
+                                      providers: [
+                                        BlocProvider.value(
+                                          value: cubit,
+                                        ),
+                                        BlocProvider.value(
+                                          value: userCubit,
+                                        ),
+                                      ],
+                                      child: Dialog(
+                                        child: VStack([
+                                          'Apakah anda yakin lokasi saat ini sudah akurat?'
+                                              .text
+                                              .base
+                                              .center
+                                              .makeCentered(),
+                                          const SizedBox(height: 12),
+                                          VStack([
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.yellow,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: 'Tidak'.text.make(),
+                                            ),
+                                            const SizedBox(height: 12),
+                                            OutlinedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                cubit.addLokasi(widget.user.id);
+                                              },
+                                              child: const Text(
+                                                'Tidak, tetap simpan',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 12),
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.green,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                cubit.addLokasi(widget.user.id);
+                                              },
+                                              child: const Text(
+                                                'Iya, simpan',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ]),
+                                        ]).p16(),
+                                      ),
+                                    ),
+                                  );
+                                },
                                 child: 'Simpan'.text.base.make(),
                               ),
                             ),
@@ -515,7 +541,7 @@ class __AddLokasiLayoutState extends State<_AddLokasiLayout> {
                     hint: 'Loading'.text.lg.make(),
                     items: const [],
                     onChanged: (e) {},
-                  ).box.width(Get.width).make().pOnly(bottom: 10),
+                  ),
                   loaded: (kapanewon) {
                     cubit.kapanewon == ''
                         ? null
@@ -524,87 +550,101 @@ class __AddLokasiLayoutState extends State<_AddLokasiLayout> {
                                 element.areaName == cubit.kapanewon)
                             .first
                             .areaId);
-                    return HStack([
-                      DropdownButtonFormField(
-                        value: cubit.kapanewon == ''
-                            ? null
-                            : kapanewon
-                                .where((element) =>
-                                    element.areaName == cubit.kapanewon)
-                                .first
-                                .areaId,
-                        hint: 'Pilih Kapanewon'.text.lg.make(),
-                        items: [
-                          ...kapanewon.map((e) {
-                            return DropdownMenuItem(
-                              value: e.areaId,
-                              child: e.areaName.text.lg.make(),
-                            );
-                          }),
-                        ],
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Pilih Kapanewon';
-                          }
-                          return null;
-                        },
-                        onChanged: (e) {
-                          cubit.setKapanewon(e as int);
-                          kelurahanCubit.getKelurahan();
-                        },
-                      ).box.width(Get.width - 50).make().pOnly(bottom: 10),
-                    ]);
-                  },
-                  orElse: () => const SizedBox(),
-                ),
-              ),
-              BlocBuilder<KelurahanCubit, KelurahanState>(
-                builder: (context, state) => state.maybeWhen(
-                  loading: () => DropdownButtonFormField<String>(
-                    hint: 'Loading'.text.lg.make(),
-                    items: const [],
-                    onChanged: (e) {},
-                  ).box.width(Get.width).make().pOnly(bottom: 10),
-                  loaded: (kapanewon) => VStack([
-                    DropdownButtonFormField(
-                      value: cubit.kelurahan == ''
+                    return DropdownButtonFormField(
+                      value: cubit.kapanewon == ''
                           ? null
                           : kapanewon
-                              .firstWhere(
-                                (element) =>
-                                    element.areaId == cubit.kapanewonId,
-                              )
-                              .districtId,
-                      hint: 'Pilih Kelurahan'.text.lg.make(),
+                              .where((element) =>
+                                  element.areaName == cubit.kapanewon)
+                              .first
+                              .areaId,
+                      hint: 'Pilih Kapanewon'.text.lg.make(),
                       items: [
-                        ...kapanewon
-                            .where(
-                          (element) => element.areaId == cubit.kapanewonId,
-                        )
-                            .map((e) {
+                        ...kapanewon.map((e) {
                           return DropdownMenuItem(
-                            value: e.districtId,
-                            child: e.districtName.text.lg.make(),
+                            value: e.areaId,
+                            child: e.areaName.text.lg.make(),
                           );
                         }),
                       ],
                       validator: (value) {
                         if (value == null) {
-                          return 'Pilih Kelurahan';
+                          return 'Pilih Kapanewon';
                         }
                         return null;
                       },
                       onChanged: (e) {
-                        cubit.setKelurahan(e as int);
+                        cubit.setKapanewon(e as int);
+                        kelurahanCubit.getKelurahan();
                       },
-                    ).box.width(Get.width - 50).make().pOnly(bottom: 10),
-                  ]),
-                  orElse: () => DropdownButtonFormField<String>(
-                    hint: 'Kelurahan'.text.lg.make(),
-                    items: const [],
-                    onChanged: (e) {},
-                  ).box.width(Get.width).make().pOnly(bottom: 10),
+                    );
+                  },
+                  orElse: () => const SizedBox(),
                 ),
+              ).wFull(context),
+              const SizedBox(height: 12),
+              BlocBuilder<InfoLokasiCubit, InfoLokasiState>(
+                builder: (context, state) {
+                  return BlocBuilder<KelurahanCubit, KelurahanState>(
+                    builder: (context, state) => state.maybeWhen(
+                      loading: () => DropdownButtonFormField<String>(
+                        hint: 'Loading'.text.lg.make(),
+                        items: const [],
+                        onChanged: (e) {},
+                      ).box.width(Get.width).make(),
+                      loaded: (kapanewon) {
+                        cubit.setKelurahan(cubit.kelurahan == ''
+                            ? 0
+                            : kapanewon
+                                .firstWhere(
+                                  (element) =>
+                                      element.areaId == cubit.kapanewonId,
+                                )
+                                .districtId);
+                        return VStack([
+                          DropdownButtonFormField(
+                            value: cubit.kelurahan == ''
+                                ? null
+                                : kapanewon
+                                    .firstWhere(
+                                      (element) =>
+                                          element.areaId == cubit.kapanewonId,
+                                    )
+                                    .districtId,
+                            hint: 'Pilih Kelurahan'.text.lg.make(),
+                            items: [
+                              ...kapanewon
+                                  .where(
+                                (element) =>
+                                    element.areaId == cubit.kapanewonId,
+                              )
+                                  .map((e) {
+                                return DropdownMenuItem(
+                                  value: e.districtId,
+                                  child: e.districtName.text.lg.make(),
+                                );
+                              }),
+                            ],
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Pilih Kelurahan';
+                              }
+                              return null;
+                            },
+                            onChanged: (e) {
+                              cubit.setKelurahan(e as int);
+                            },
+                          ).box.width(Get.width).make(),
+                        ]);
+                      },
+                      orElse: () => DropdownButtonFormField<String>(
+                        hint: 'Kelurahan'.text.lg.make(),
+                        items: const [],
+                        onChanged: (e) {},
+                      ).box.width(Get.width).make(),
+                    ),
+                  );
+                },
               ),
               'NSPQ'.text.base.bold.make(),
               FormFields.textFormField(
@@ -990,6 +1030,11 @@ class __AddLokasiLayoutState extends State<_AddLokasiLayout> {
                         return GoogleMap(
                           initialCameraPosition: mapsCubit.initialPosition,
                           mapType: MapType.normal,
+                          zoomGesturesEnabled: true,
+                          scrollGesturesEnabled: true,
+                          gestureRecognizers: Set()
+                            ..add(Factory<PanGestureRecognizer>(
+                                () => PanGestureRecognizer())),
                           onMapCreated: (controller) {
                             mapsCubit.createController(controller);
                           },

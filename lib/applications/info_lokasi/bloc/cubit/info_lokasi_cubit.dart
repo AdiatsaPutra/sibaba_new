@@ -82,7 +82,8 @@ class InfoLokasiCubit extends Cubit<InfoLokasiState> {
 
   void init({LocationDetail? l}) {
     locationDetail = l;
-    Logger().e(l!.detailLokasi.toJson());
+    Logger().e(l!.maps.latitude);
+    Logger().e(l!.maps.longitude);
     nspq.text = l.detailLokasi.nspq!;
     nama.text = l.detailLokasi.nama;
     alamat.text = l.detailLokasi.alamat;
@@ -302,37 +303,44 @@ class InfoLokasiCubit extends Cubit<InfoLokasiState> {
     );
   }
 
-  void addLokasi() async {
+  void addLokasi(int userId) async {
     final deskripsiText = await deskripsi.getText();
     emit(const InfoLokasiState.loading());
-    final locationRequest = LocationRequest(
-      userId: adminId.toString(),
-      nspq: nspq.text,
-      areaUnit: kapanewonId,
-      districtUnit: kelurahanId,
-      nama: nama.text,
-      locSlug: '',
-      alamat: alamat.text,
-      telpUnit: telepon.text,
-      skPendirian: sk.text,
-      tmpBelajar: tempatBelajar.text,
-      email: email.text,
-      akreditasi: akreditasi,
-      tglBerdiri: DateTime.parse(tanggalBerdiri.text),
-      direktur: direktur.text,
-      tglAkreditasi: DateTime.parse(tanggalAkreditasi.text),
-      status: status,
-      deskripsi: deskripsiText == '' ? '-' : deskripsiText,
-      hariMasuk: hariMasuk,
-      masuk: jamMasuk.text,
-      selesai: jamKeluar.text,
-      latitude: lat.text,
-      longitude: lng.text,
-    );
-    final location = await _locationRepo.addLocation(locationRequest);
+    final location = await _locationRepo
+        .deleteLocation(locationDetail!.detailLokasi.locationId);
     location.fold(
       (l) => emit(InfoLokasiState.error(l.message)),
-      (r) => emit(const InfoLokasiState.added()),
+      (r) async {
+        final locationRequest = LocationRequest(
+          userId: userId.toString(),
+          nspq: nspq.text,
+          areaUnit: kapanewonId,
+          districtUnit: kelurahanId,
+          nama: nama.text,
+          locSlug: nama.text,
+          alamat: alamat.text,
+          telpUnit: telepon.text,
+          skPendirian: sk.text,
+          tmpBelajar: tempatBelajar.text,
+          email: email.text,
+          akreditasi: akreditasi,
+          tglBerdiri: DateTime.parse(tanggalBerdiri.text),
+          direktur: direktur.text,
+          tglAkreditasi: DateTime.parse(tanggalAkreditasi.text),
+          status: status,
+          deskripsi: deskripsiText == '' ? '-' : deskripsiText,
+          hariMasuk: hariMasuk,
+          masuk: jamMasuk.text,
+          selesai: jamKeluar.text,
+          latitude: lat.text,
+          longitude: lng.text,
+        );
+        final location = await _locationRepo.addLocation(locationRequest);
+        location.fold(
+          (l) => emit(InfoLokasiState.error(l.message)),
+          (r) => emit(const InfoLokasiState.added()),
+        );
+      },
     );
   }
 

@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,8 +10,8 @@ class MapsCubit extends Cubit<MapsState> {
 
   late GoogleMapController controller;
   CameraPosition initialPosition = const CameraPosition(
-    target: LatLng(0.0, 0.0),
-    zoom: 1,
+    target: LatLng(-7.887888021778556, 110.33187565562294),
+    zoom: 18,
   );
 
   Set<Marker> markers = {};
@@ -30,7 +29,8 @@ class MapsCubit extends Cubit<MapsState> {
     );
   }
 
-  void moveCameraToCurrentPosition({double lat = 0, double lng = 0}) {
+  void moveCameraToCurrentPosition(
+      {double lat = -7.88788735757074, double lng = 110.33187632617513}) {
     try {
       controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(lat, lng), zoom: 18),

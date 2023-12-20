@@ -13,5 +13,7 @@ abstract class LocationRepo {
     int id,
   );
   Future<Either<LocationException, void>> addLocation(LocationRequest request);
+  Future<Either<LocationException, void>> updateLocation(
+      LocationRequest request);
   Future<Either<LocationException, void>> deleteLocation(int id);
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:sibaba/applications/admin/bloc/location/location_cubit.dart';
 import 'package:sibaba/applications/admin/bloc/maps/maps_cubit.dart';
 import 'package:sibaba/applications/admin/models/user.dart';
@@ -251,6 +252,16 @@ class _DashboardLayoutState extends State<_DashboardLayout> {
 
   Set<Marker> getmarkers(LocationInfo location) {
     setState(() {
+      markers.add(Marker(
+        markerId: MarkerId(Random().nextInt(100).toString()),
+        position: const LatLng(
+          -7.821494391265134,
+          110.32701712802746,
+        ),
+        infoWindow: const InfoWindow(
+          title: 'Pusat',
+        ),
+      ));
       for (var y in location.maps) {
         for (var x in location.lokasi) {
           markers.add(Marker(

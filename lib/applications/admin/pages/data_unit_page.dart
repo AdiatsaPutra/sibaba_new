@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sibaba/applications/admin/bloc/location/location_cubit.dart';
@@ -388,11 +389,22 @@ class LokasiData extends DataTableSource {
             HStack([
               GestureDetector(
                 onTap: () {
+                  // final dataComplete = locations[index].alamat != '-' &&
+                  //     locations[index].skPendirian != '-' &&
+                  //     !locations[index].tglAkreditasi!.contains('1900-01-01');
+                  // if (dataComplete) {
                   Get.to(
                     () => LocationDetailPage(
                       slug: locations[index].locSlug!,
                     ),
                   );
+                  // } else {
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     const SnackBar(
+                  //       content: Text('Data belum dilengkapi admin'),
+                  //     ),
+                  //   );
+                  // }
                 },
                 child: const Icon(Icons.search, color: Colors.blue),
               ),
